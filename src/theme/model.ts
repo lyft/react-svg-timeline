@@ -12,6 +12,7 @@ export interface XAxisTheme {
 
 export interface TooltipTheme {
   readonly backgroundColor: string
+  readonly fontColor: string
 }
 
 export interface TrimmerTheme {

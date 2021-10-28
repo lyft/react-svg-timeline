@@ -15,11 +15,11 @@ export const useTooltipStyle = makeStyles((theme: Theme) => ({
     fill: tooltipTheme.backgroundColor,
     strokeWidth: 0,
   }),
-  text: {
-    fill: 'white',
+  text: (tooltipTheme: TooltipTheme) => ({
+    fill: tooltipTheme.fontColor,
     dominantBaseline: 'middle',
     textAnchor: 'middle',
     fontFamily: theme.typography.caption.fontFamily,
     fontSize: TOOLTIP_FONT_SIZE,
-  },
+  }),
 }))
