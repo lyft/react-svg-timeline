@@ -59,13 +59,6 @@ export const EventTooltip = ({ type, y, parentWidth, text, triggerRef, classes }
   )
 }
 
-interface ArrowDownProps {
-  readonly tipX: number
-  readonly baseY: number
-  readonly dimension: number
-  readonly className: string
-}
-
 /**
  * Calculates the `width` and `height` of the passed tooltip text.
  */
