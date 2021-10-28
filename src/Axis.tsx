@@ -1,13 +1,13 @@
 import * as React from 'react'
 import makeStyles from '@material-ui/core/styles/makeStyles'
-import { Theme } from '@material-ui/core'
+import { LineAxisTheme } from './theme/model'
 
-const useAxisStyles = makeStyles((theme: Theme) => ({
-  axis: {
-    stroke: theme.palette.grey['500'],
-    strokeWidth: 2
-  }
-}))
+const useAxisStyles = makeStyles({
+  axis: (lineAxisTheme: LineAxisTheme) => ({
+    stroke: lineAxisTheme.stroke,
+    strokeWidth: lineAxisTheme.strokeWidth
+  }),
+})
 
 export const Axis = ({ y }: { y: number }) => {
   const classes = useAxisStyles()
