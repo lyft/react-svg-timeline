@@ -14,7 +14,7 @@ interface Props {
 }
 
 export const EventTooltip = ({ type, y, parentWidth, text, triggerRef, classes }: Props) => {
-  const { textLines, tooltipWidth, tooltipHeight, baseHeight } = getTooltipDimensions(text)
+  const { textLines, tooltipWidth, tooltipHeight } = getTooltipDimensions(text)
 
   return (
     <Tooltip triggerRef={triggerRef}>
@@ -27,7 +27,6 @@ export const EventTooltip = ({ type, y, parentWidth, text, triggerRef, classes }
 
         const tooltipYPadding = 12
         const tooltipY = y - yOffset - tooltipHeight - tooltipYPadding // don't follow mouse
-        const baseY = y - yOffset - baseHeight - tooltipYPadding
 
         // determines how the rectangular tooltip area is offset to the left/right of the arrow
         // the closer to the left edge, the more the rect is shifted to the right (same for right edge)
@@ -53,7 +52,6 @@ export const EventTooltip = ({ type, y, parentWidth, text, triggerRef, classes }
                 className={classes.text}
               />
             </svg>
-            <ArrowDown tipX={tooltipX} baseY={baseY} dimension={arrowDimension} className={classes.background} />)
           </g>
         )
       }}
@@ -66,20 +64,6 @@ interface ArrowDownProps {
   readonly baseY: number
   readonly dimension: number
   readonly className: string
-}
-
-const ArrowDown = ({ tipX, baseY, dimension, className }: ArrowDownProps) => {
-  return (
-    <svg
-      x={tipX - dimension / 2}
-      y={baseY + dimension / 2 + 5} // the triangle is only of height 5
-      viewBox={`0 0 10 10`} // path is expressed for a 10x10 square
-      width={dimension}
-      height={dimension}
-    >
-      <path className={className} d={`M0 2.5 l 5 5 5-5z`} />
-    </svg>
-  )
 }
 
 /**
