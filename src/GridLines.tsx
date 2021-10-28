@@ -106,7 +106,7 @@ const YearView = ({ height, domain, timeScale, showDecadesOnly = false }: YearVi
 /* ·················································································································· */
 
 const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-const monthViewLabelFontSize = 14
+const monthViewLabelFontSize = 18
 
 const useMonthViewStyles = makeStyles((theme: Theme) => ({
   ...gridLineStyle(theme),
