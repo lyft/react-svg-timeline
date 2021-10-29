@@ -21,6 +21,6 @@ export const useTooltipStyle = makeStyles((theme: Theme) => ({
     dominantBaseline: 'middle',
     textAnchor: 'middle',
     fontFamily: theme.typography.caption.fontFamily,
-    fontSize: tooltipTheme.fontSize ? tooltipTheme.fontSize : TOOLTIP_FONT_SIZE,
+    fontSize: TOOLTIP_FONT_SIZE,
   }),
 }))
