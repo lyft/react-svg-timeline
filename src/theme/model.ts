@@ -8,8 +8,7 @@ export interface XAxisTheme {
   readonly labelColor: string
   readonly monthLabelFontSize?: number
   readonly yearLabelFontSize?: number
-  readonly monthLabelFontWeight?: number
-  readonly yearLabelFontWeight?: number
+  readonly labelFontWeight?: number
 }
 
 export interface TooltipTheme {
