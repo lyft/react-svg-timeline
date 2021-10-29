@@ -12,7 +12,7 @@ export interface XAxisTheme {
 
 export interface TooltipTheme {
   readonly backgroundColor: string
-  readonly stroke?: string
+  readonly strokeColor?: string
   readonly strokeWidth?: number
   readonly fontColor?: string
 }
