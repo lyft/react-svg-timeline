@@ -13,14 +13,14 @@ export const useTooltipStyle = makeStyles((theme: Theme) => ({
   },
   background: (tooltipTheme: TooltipTheme) => ({
     fill: tooltipTheme.backgroundColor,
-    stroke: tooltipTheme.stroke,
-    strokeWidth: tooltipTheme.strokeWidth,
+    stroke: tooltipTheme.stroke ? tooltipTheme.stroke : 'transparent',
+    strokeWidth: tooltipTheme.strokeWidth ? tooltipTheme.strokeWidth : 0,
   }),
   text: (tooltipTheme: TooltipTheme) => ({
-    fill: tooltipTheme.fontColor,
+    fill: tooltipTheme.fontColor ? tooltipTheme.fontColor : 'white',
     dominantBaseline: 'middle',
     textAnchor: 'middle',
     fontFamily: theme.typography.caption.fontFamily,
-    fontSize: TOOLTIP_FONT_SIZE,
+    fontSize: tooltipTheme.fontSize ? tooltipTheme.fontSize : TOOLTIP_FONT_SIZE,
   }),
 }))
