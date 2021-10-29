@@ -27,6 +27,6 @@ export interface TrimmerTheme {
 }
 
 export interface LineAxisTheme {
-  readonly stroke?: string
+  readonly strokeColor?: string
   readonly strokeWidth?: number
 }

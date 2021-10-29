@@ -6,7 +6,7 @@ import { useTimelineTheme } from './theme'
 
 const useAxisStyles = makeStyles((theme: Theme) => ({
   axis: (lineAxisTheme: LineAxisTheme) => ({
-    stroke: lineAxisTheme.stroke ? lineAxisTheme.stroke : theme.palette.grey['500'],
+    stroke: lineAxisTheme.strokeColor ? lineAxisTheme.strokeColor : theme.palette.grey['500'],
     strokeWidth: lineAxisTheme.strokeWidth ? lineAxisTheme.strokeWidth : 2,
   }),
 }))
