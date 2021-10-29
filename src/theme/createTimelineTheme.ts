@@ -16,10 +16,6 @@ export const createTimelineTheme = (theme: MaterialTheme, options?: TimelineThem
     },
     tooltip: {
       backgroundColor: theme.palette.text.secondary,
-      fontColor: 'white',
-      // TODO: update this default
-      stroke: theme.palette.text.secondary,
-      strokeWidth: 0,
     },
     trimmer: {
       trimHandleColor: defaultOrange,
