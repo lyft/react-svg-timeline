@@ -2,7 +2,7 @@ export interface TimelineTheme {
   readonly xAxis: XAxisTheme
   readonly tooltip: TooltipTheme
   readonly trimmer: TrimmerTheme
-  readonly lineAxis: LineAxisTheme
+  readonly lineAxis?: LineAxisTheme
 }
 
 export interface XAxisTheme {
@@ -27,6 +27,6 @@ export interface TrimmerTheme {
 }
 
 export interface LineAxisTheme {
-  readonly stroke: string
-  readonly strokeWidth: number
+  readonly stroke?: string
+  readonly strokeWidth?: number
 }

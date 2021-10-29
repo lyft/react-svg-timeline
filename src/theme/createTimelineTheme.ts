@@ -29,10 +29,6 @@ export const createTimelineTheme = (theme: MaterialTheme, options?: TimelineThem
       trimRangeOutsideColor: defaultGrey,
       trimRangeOutsideOpacity: defaultOpacity,
     },
-    lineAxis: {
-      stroke: theme.palette.grey['500'],
-      strokeWidth: 2,
-    },
   }
   return options ? deepMerge(defaults, options) : defaults
 }
