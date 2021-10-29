@@ -5,7 +5,7 @@ import { ClassNameMap } from '@material-ui/styles'
 
 export type TooltipClasses = ClassNameMap<'background' | 'text' | 'svg'>
 
-export const TOOLTIP_FONT_SIZE = 14
+export const TOOLTIP_FONT_SIZE = 12
 
 export const useTooltipStyle = makeStyles((theme: Theme) => ({
   svg: {
