@@ -27,6 +27,11 @@ export const EventTooltip = ({ type, y, parentWidth, text, triggerRef, classes, 
         const tooltipX = type === 'period' ? 0 : type.singleEventX - xOffset
 
         const tooltipYPadding = 12
+        console.log(y);
+        console.log(yOffset);
+        console.log(tooltipHeight);
+        console.log(tooltipYPadding);
+        
         const tooltipY = y + yOffset - tooltipHeight - tooltipYPadding // don't follow mouse
         const baseY = y - yOffset - baseHeight - tooltipYPadding
 
