@@ -257,10 +257,6 @@ const HourView = ({ height, domain, timeScale }: HourViewProps) => {
   const xAxisTheme = useTimelineTheme().xAxis
   const classes = useMonthViewStyles(xAxisTheme)
 
-  console.log("why are there 3 lines?????????????????")
-  console.log(new Date(domain?.[0]).toLocaleTimeString);
-  console.log(new Date(domain?.[1]).toLocaleTimeString);
-
   // Scale the bounds slightly inside so they don't touch the edges
   const leftBoundMs = domain[0] + SECOND_OFFSET_MS;
   const rightBoundMs = domain[1] - SECOND_OFFSET_MS;
@@ -277,14 +273,14 @@ const HourView = ({ height, domain, timeScale }: HourViewProps) => {
         {/* TODO: maybe add stuff to HourLine like the date or time ago? */}
         <HourLine xPosition={leftBoundPos} />
         <text className={classes.label} x={leftBoundPos} y={height - 0.5 * monthViewLabelFontSize}>
-          {leftBoundDate.toTimeString()}
+          {leftBoundDate.toLocaleTimeString()}
         </text>
         {/* TODO: add day? Requires logic */}
       </g>),
       (<g key={2}>
         <HourLine xPosition={rightBoundPos} />
         <text className={classes.label} x={rightBoundPos} y={height - 0.5 * monthViewLabelFontSize}>
-          {rightBoundDate.toTimeString()}
+          {rightBoundDate.toLocaleTimeString()}
         </text>
       </g>)
   ];
