@@ -270,10 +270,10 @@ const useHourViewStyles = makeStyles((theme: Theme) => ({
 }))
 
 const getTimelineBoundsLabel = (date: Date) => {
-  const time = date.toTimeString();
+  const time = date.toLocaleTimeString();
   const month = date.getMonth();
   const day = date.getDay();
-  const label = `${month}-${day} @ ${time}`;
+  const label = `${month}/${day} @ ${time}`;
   return label;
 }
 
