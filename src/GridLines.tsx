@@ -253,8 +253,24 @@ interface HourViewProps {
   timeScale: ScaleLinear<number, number>
 }
 
+// TODO(smonero): move all these to config
+const defaultHourViewLabelFontSize = 10
+
+const useHourViewStyles = makeStyles((theme: Theme) => ({
+  ...gridLineStyle(theme),
+  label: (xAxisTheme: XAxisTheme) => ({
+    fill: xAxisTheme.labelColor,
+    opacity: 0.5,
+    fontFamily: theme.typography.caption.fontFamily,
+    fontSize: defaultHourViewLabelFontSize,
+    fontWeight: xAxisTheme.monthLabelFontWeight ? xAxisTheme.monthLabelFontWeight : 'bold',
+    textAnchor: 'middle',
+    cursor: 'default',
+  }),
+}))
+
 const getTimelineBoundsLabel = (date: Date) => {
-  const time = date.toLocaleTimeString();
+  const time = date.toTimeString();
   const month = date.getMonth();
   const day = date.getDay();
   const label = `${month}-${day} @ ${time}`;
@@ -263,7 +279,7 @@ const getTimelineBoundsLabel = (date: Date) => {
 
 const HourView = ({ height, domain, timeScale }: HourViewProps) => {
   const xAxisTheme = useTimelineTheme().xAxis
-  const classes = useMonthViewStyles(xAxisTheme)
+  const classes = useHourViewStyles(xAxisTheme)
 
   // Scale the bounds slightly inside so they don't touch the edges
   const leftBoundMs = domain[0] + TEN_SECOND_OFFSET_MS;
