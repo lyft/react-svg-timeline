@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { ScaleLinear } from 'd3-scale'
 import { Theme } from '@material-ui/core'
-import { dayDuration, monthDuration, weekDuration, yearDuration, ZoomLevels } from './ZoomScale'
+import { monthDuration, weekDuration, yearDuration, ZoomLevels } from './ZoomScale'
 import { addMonths, addWeeks, endOfMonth, endOfWeek, isBefore, isEqual, startOfWeek } from 'date-fns'
 import { Domain } from './model'
 import makeStyles from '@material-ui/core/styles/makeStyles'
