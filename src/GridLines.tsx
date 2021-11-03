@@ -269,7 +269,7 @@ const HourView = ({ height, domain, timeScale }: HourViewProps) => {
 
   // TODO: What should I use as the key? Does it matter?
   const lines = [
-      (<g key={leftBoundDate.getMilliseconds}>
+      (<g key={leftBoundDate.getMilliseconds()}>
         {/* TODO: maybe add stuff to HourLine like the date or time ago? */}
         <HourLine xPosition={leftBoundPos} />
         <text className={classes.label} x={leftBoundPos} y={height - 0.5 * monthViewLabelFontSize}>
@@ -277,7 +277,7 @@ const HourView = ({ height, domain, timeScale }: HourViewProps) => {
         </text>
         {/* TODO: add day? Requires logic */}
       </g>),
-      (<g key={rightBoundDate.getMilliseconds}>
+      (<g key={rightBoundDate.getMilliseconds()}>
         <HourLine xPosition={rightBoundPos} />
         <text className={classes.label} x={rightBoundPos} y={height - 1.5 * monthViewLabelFontSize}>
           {rightBoundDate.toLocaleTimeString()}
