@@ -271,7 +271,8 @@ const useHourViewStyles = makeStyles((theme: Theme) => ({
 
 const getTimelineBoundsLabel = (date: Date) => {
   const time = date.toLocaleTimeString();
-  const month = date.getMonth();
+  // +1 because months start at 0
+  const month = date.getMonth() + 1;
   const day = date.getDate();
   const label = `${month}/${day} @ ${time}`;
   return label;
@@ -291,16 +292,13 @@ const HourView = ({ height, domain, timeScale }: HourViewProps) => {
   const leftBoundPos = timeScale(leftBoundMs)!
   const rightBoundPos = timeScale(rightBoundMs)!
 
-  // TODO: What should I use as the key? Does it matter? 
-  //UPDATE: If key value is something based of time (like date.getMilliseconds) then there are serious rendering issues
+  // TODO: Possibly change key
   const lines = [
       (<g key={1}>
-        {/* TODO: maybe add stuff to HourLine like the date or time ago? */}
         <HourLine xPosition={leftBoundPos} />
         <text className={classes.label} x={leftBoundPos} y={height - 0.5 * monthViewLabelFontSize}>
           {leftBoundLabel}
         </text>
-        {/* TODO: add day? Requires logic */}
       </g>),
       (<g key={2}>
         <HourLine xPosition={rightBoundPos} />
