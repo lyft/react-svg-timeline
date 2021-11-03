@@ -246,7 +246,7 @@ const HourLine = ({ xPosition, height }: HourLineProps) => {
   )
 }
 
-const MINUTE_OFFSET_MS = 60000;
+const SECOND_OFFSET_MS = 1000;
 interface HourViewProps {
   height: number
   domain: [number, number]
@@ -258,8 +258,8 @@ const HourView = ({ height, domain, timeScale }: HourViewProps) => {
   const classes = useMonthViewStyles(xAxisTheme)
 
   // Scale the bounds slightly inside so they don't touch the edges
-  const leftBoundMs = domain[0] + MINUTE_OFFSET_MS;
-  const rightBoundMs = domain[1] - MINUTE_OFFSET_MS;
+  const leftBoundMs = domain[0] + SECOND_OFFSET_MS;
+  const rightBoundMs = domain[1] - SECOND_OFFSET_MS;
 
   const leftBoundDate = new Date(leftBoundMs);
   const rightBoundDate = new Date(rightBoundMs);
