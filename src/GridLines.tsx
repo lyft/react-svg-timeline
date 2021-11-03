@@ -276,14 +276,14 @@ const HourView = ({ height, domain, timeScale }: HourViewProps) => {
         {/* TODO: maybe add stuff to HourLine like the date or time ago? */}
         <HourLine xPosition={leftBoundPos} />
         <text className={classes.label} x={leftBoundPos} y={height - 0.5 * monthViewLabelFontSize}>
-          {leftBoundDate.toLocaleTimeString()}
+          {leftBoundDate.toTimeString()}
         </text>
         {/* TODO: add day? Requires logic */}
       </g>),
       (<g key={rightBoundDate.getMilliseconds()}>
         <HourLine xPosition={rightBoundPos} />
         <text className={classes.label} x={rightBoundPos} y={height - 0.5 * monthViewLabelFontSize}>
-          {rightBoundDate.toLocaleTimeString()}
+          {rightBoundDate.toTimeString()}
         </text>
       </g>)
   ];
