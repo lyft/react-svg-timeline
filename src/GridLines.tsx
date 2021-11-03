@@ -257,8 +257,9 @@ const HourView = ({ height, domain, timeScale }: HourViewProps) => {
   const xAxisTheme = useTimelineTheme().xAxis
   const classes = useMonthViewStyles(xAxisTheme)
 
-  console.log(domain?.[0]);
-  console.log(domain?.[1]);
+  console.log("why are there 3 lines?????????????????")
+  console.log(new Date(domain?.[0]).toLocaleTimeString);
+  console.log(new Date(domain?.[1]).toLocaleTimeString);
 
   // Scale the bounds slightly inside so they don't touch the edges
   const leftBoundMs = domain[0] + SECOND_OFFSET_MS;
