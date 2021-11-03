@@ -28,7 +28,7 @@ export const EventTooltip = ({ type, y, parentWidth, text, triggerRef, classes, 
 
         const tooltipYPadding = 12
         //const tooltipY = y - yOffset - tooltipHeight - tooltipYPadding // don't follow mouse
-        const tooltipY = y - yOffset + tooltipHeight + tooltipYPadding;
+        const tooltipY = y - yOffset + tooltipHeight - tooltipYPadding;
         const baseY = y - yOffset - baseHeight - tooltipYPadding
 
 
