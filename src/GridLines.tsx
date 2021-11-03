@@ -240,7 +240,7 @@ const HourLine = ({ xPosition, height }: HourLineProps) => {
       x1={xPosition}
       y1={0}
       x2={xPosition}
-      y2={height ? height : '100%'}
+      y2={height ? height : '80%'}
       strokeWidth={1} // slightly fatter year boundary
     />
   )
@@ -272,7 +272,7 @@ const useHourViewStyles = makeStyles((theme: Theme) => ({
 const getTimelineBoundsLabel = (date: Date) => {
   const time = date.toLocaleTimeString();
   const month = date.getMonth();
-  const day = date.getDay();
+  const day = date.getDate();
   const label = `${month}/${day} @ ${time}`;
   return label;
 }
