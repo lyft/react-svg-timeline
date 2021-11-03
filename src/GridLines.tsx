@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { ScaleLinear } from 'd3-scale'
 import { Theme } from '@material-ui/core'
-import { monthDuration, weekDuration, yearDuration, ZoomLevels } from './ZoomScale'
+import { dayDuration, monthDuration, weekDuration, yearDuration, ZoomLevels } from './ZoomScale'
 import { addMonths, addWeeks, endOfMonth, endOfWeek, isBefore, isEqual, startOfWeek } from 'date-fns'
 import { Domain } from './model'
 import makeStyles from '@material-ui/core/styles/makeStyles'
@@ -253,6 +253,15 @@ interface HourViewProps {
   timeScale: ScaleLinear<number, number>
 }
 
+const getTimelineBoundsLabel = (date: Date) => {
+  const hours = date.getHours();
+  const minutes = date.getMinutes();
+  const month = date.getMonth();
+  const day = date.getDay();
+  const label = `${month}:${day} @ ${hours}:${minutes}`;
+  return label;
+}
+
 const HourView = ({ height, domain, timeScale }: HourViewProps) => {
   const xAxisTheme = useTimelineTheme().xAxis
   const classes = useMonthViewStyles(xAxisTheme)
@@ -261,8 +270,8 @@ const HourView = ({ height, domain, timeScale }: HourViewProps) => {
   const leftBoundMs = domain[0] + SECOND_OFFSET_MS;
   const rightBoundMs = domain[1] - SECOND_OFFSET_MS;
 
-  const leftBoundDate = new Date(leftBoundMs);
-  const rightBoundDate = new Date(rightBoundMs);
+  const leftBoundLabel = getTimelineBoundsLabel(new Date(leftBoundMs));
+  const rightBoundLabel = getTimelineBoundsLabel(new Date(rightBoundMs));
 
   const leftBoundPos = timeScale(leftBoundMs)!
   const rightBoundPos = timeScale(rightBoundMs)!
@@ -273,14 +282,14 @@ const HourView = ({ height, domain, timeScale }: HourViewProps) => {
         {/* TODO: maybe add stuff to HourLine like the date or time ago? */}
         <HourLine xPosition={leftBoundPos} />
         <text className={classes.label} x={leftBoundPos} y={height - 0.5 * monthViewLabelFontSize}>
-          {leftBoundDate.toLocaleTimeString()}
+          {leftBoundLabel}
         </text>
         {/* TODO: add day? Requires logic */}
       </g>),
       (<g key={2}>
         <HourLine xPosition={rightBoundPos} />
         <text className={classes.label} x={rightBoundPos} y={height - 0.5 * monthViewLabelFontSize}>
-          {rightBoundDate.toLocaleTimeString()}
+          {rightBoundLabel}
         </text>
       </g>)
   ];
