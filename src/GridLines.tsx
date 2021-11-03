@@ -246,7 +246,7 @@ const HourLine = ({ xPosition, height }: HourLineProps) => {
   )
 }
 
-const SECOND_OFFSET_MS = 1000;
+const TEN_SECOND_OFFSET_MS = 10000;
 interface HourViewProps {
   height: number
   domain: [number, number]
@@ -254,11 +254,10 @@ interface HourViewProps {
 }
 
 const getTimelineBoundsLabel = (date: Date) => {
-  const hours = date.getHours();
-  const minutes = date.getMinutes();
+  const time = date.toLocaleTimeString();
   const month = date.getMonth();
   const day = date.getDay();
-  const label = `${month}:${day} @ ${hours}:${minutes}`;
+  const label = `${month}-${day} @ ${time}`;
   return label;
 }
 
@@ -267,8 +266,8 @@ const HourView = ({ height, domain, timeScale }: HourViewProps) => {
   const classes = useMonthViewStyles(xAxisTheme)
 
   // Scale the bounds slightly inside so they don't touch the edges
-  const leftBoundMs = domain[0] + SECOND_OFFSET_MS;
-  const rightBoundMs = domain[1] - SECOND_OFFSET_MS;
+  const leftBoundMs = domain[0] + TEN_SECOND_OFFSET_MS;
+  const rightBoundMs = domain[1] - TEN_SECOND_OFFSET_MS;
 
   const leftBoundLabel = getTimelineBoundsLabel(new Date(leftBoundMs));
   const rightBoundLabel = getTimelineBoundsLabel(new Date(rightBoundMs));
@@ -276,7 +275,8 @@ const HourView = ({ height, domain, timeScale }: HourViewProps) => {
   const leftBoundPos = timeScale(leftBoundMs)!
   const rightBoundPos = timeScale(rightBoundMs)!
 
-  // TODO: What should I use as the key? Does it matter?
+  // TODO: What should I use as the key? Does it matter? 
+  //UPDATE: If key value is something based of time (like date.getMilliseconds) then there are serious rendering issues
   const lines = [
       (<g key={1}>
         {/* TODO: maybe add stuff to HourLine like the date or time ago? */}
