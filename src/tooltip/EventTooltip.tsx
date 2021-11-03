@@ -28,9 +28,17 @@ export const EventTooltip = ({ type, y, parentWidth, text, triggerRef, classes, 
 
         const tooltipYPadding = 12
         //const tooltipY = y - yOffset - tooltipHeight - tooltipYPadding // don't follow mouse
-        const tooltipY = y + yOffset - baseHeight - tooltipYPadding;;
+        const tooltipY = y + yOffset - tooltipHeight - tooltipYPadding;
         const baseY = y - yOffset - baseHeight - tooltipYPadding
 
+
+        console.log("tooltipY " + tooltipY);
+        console.log("y " + y);
+        console.log("yOffset " + yOffset);
+        console.log("tooltipHeight " + tooltipHeight);
+        console.log("tooltipYPadding " + tooltipYPadding);
+        console.log("baseHeight " + baseHeight);
+        console.log("baseY " + baseY);
         // determines how the rectangular tooltip area is offset to the left/right of the arrow
         // the closer to the left edge, the more the rect is shifted to the right (same for right edge)
         // if the arrow prop is falsy, safety margin is 0
