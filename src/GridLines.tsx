@@ -247,10 +247,10 @@ const HourLine = ({ xPosition, height }: HourLineProps) => {
 }
 
 const MINUTE_OFFSET_MS = 60000;
-
-// TODO(smonero): I have no idea what this is for and why we are omitting smallerZoomScale
-// TODO: figure it out
-interface HourViewProps extends Omit<Props, 'smallerZoomScale'> {
+interface HourViewProps {
+  height: number
+  domain: [number, number]
+  timeScale: ScaleLinear<number, number>
 }
 
 const HourView = ({ height, domain, timeScale }: HourViewProps) => {
