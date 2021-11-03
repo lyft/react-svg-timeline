@@ -240,7 +240,7 @@ const HourLine = ({ xPosition, height }: HourLineProps) => {
       x1={xPosition}
       y1={0}
       x2={xPosition}
-      y2={height ? height : '20%'}
+      y2={height ? height : '100%'}
       strokeWidth={1} // slightly fatter year boundary
     />
   )
@@ -279,7 +279,7 @@ const HourView = ({ height, domain, timeScale }: HourViewProps) => {
       </g>),
       (<g key={rightBoundDate.getMilliseconds()}>
         <HourLine xPosition={rightBoundPos} />
-        <text className={classes.label} x={rightBoundPos} y={height - 1.5 * monthViewLabelFontSize}>
+        <text className={classes.label} x={rightBoundPos} y={height - 0.5 * monthViewLabelFontSize}>
           {rightBoundDate.toLocaleTimeString()}
         </text>
       </g>)
