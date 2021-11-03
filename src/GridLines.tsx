@@ -257,6 +257,9 @@ const HourView = ({ height, domain, timeScale }: HourViewProps) => {
   const xAxisTheme = useTimelineTheme().xAxis
   const classes = useMonthViewStyles(xAxisTheme)
 
+  console.log(domain?.[0]);
+  console.log(domain?.[1]);
+
   // Scale the bounds slightly inside so they don't touch the edges
   const leftBoundMs = domain[0] + SECOND_OFFSET_MS;
   const rightBoundMs = domain[1] - SECOND_OFFSET_MS;
