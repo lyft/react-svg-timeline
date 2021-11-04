@@ -25,21 +25,14 @@ const gridLineStyle = (theme: Theme) => ({
 })
 
 export const GridLines = ({ height, domain, smallerZoomScale, timeScale, weekStripes }: Props) => {
-  console.log(smallerZoomScale);
   switch (smallerZoomScale) {
     case ZoomLevels.TEN_YEARS:
       return <YearView height={height} domain={domain} timeScale={timeScale} showDecadesOnly={true} />
     case ZoomLevels.ONE_YEAR:
       return <YearView height={height} domain={domain} timeScale={timeScale} />
-    case ZoomLevels.ONE_MONTH:
-      return <MonthView height={height} domain={domain} timeScale={timeScale} showWeekStripes={weekStripes === undefined ? true : weekStripes} />
     default:
       return (
-        <HourView
-          height={height}
-          domain={domain}
-          timeScale={timeScale}
-        />
+        <MonthView height={height} domain={domain} timeScale={timeScale} showWeekStripes={weekStripes === undefined ? true : weekStripes} />
       )
   }
 }
@@ -98,6 +91,9 @@ const YearView = ({ height, domain, timeScale, showDecadesOnly = false }: YearVi
     )
   })
 
+  // Add in boundary lines in addition to other lines
+  const boundLines = boundViewLines({height, domain, timeScale});
+  lines.push(...boundLines);
   return <g>{lines}</g>
 }
 
@@ -169,6 +165,9 @@ const MonthView = ({ height, domain, timeScale, showWeekStripes = false }: Month
     )
   })
 
+  // Add in boundary lines in addition to other lines
+  const boundLines = boundViewLines({height, domain, timeScale});
+  lines.push(...boundLines);
   return <g>{lines}</g>
 }
 
@@ -227,14 +226,14 @@ const WeekStripes = ({ monthStart, timeScale }: WeekStripesProps) => {
 /*  Hour
 /* ·················································································································· */
 
-interface HourLineProps {
+interface BoundLineProps {
   xPosition: number
   height?: string
 }
 
-const HourLine = ({ xPosition, height }: HourLineProps) => {
+const BoundLine = ({ xPosition, height }: BoundLineProps) => {
   const xAxisTheme = useTimelineTheme().xAxis
-  const classes = useMonthViewStyles(xAxisTheme)
+  const classes = useHourViewStyles(xAxisTheme)
   return (
     <line
       className={classes.line}
@@ -248,7 +247,7 @@ const HourLine = ({ xPosition, height }: HourLineProps) => {
 }
 
 const TEN_SECOND_OFFSET_MS = 10000;
-interface HourViewProps {
+interface BoundViewProps {
   height: number
   domain: [number, number]
   timeScale: ScaleLinear<number, number>
@@ -278,7 +277,7 @@ const getTimelineBoundsLabel = (date: Date) => {
   return label;
 }
 
-const HourView = ({ height, domain, timeScale }: HourViewProps) => {
+const boundViewLines = ({ height, domain, timeScale }: BoundViewProps) => {
   const xAxisTheme = useTimelineTheme().xAxis
   const classes = useHourViewStyles(xAxisTheme)
 
@@ -292,21 +291,20 @@ const HourView = ({ height, domain, timeScale }: HourViewProps) => {
   const leftBoundPos = timeScale(leftBoundMs)!
   const rightBoundPos = timeScale(rightBoundMs)!
 
-  // TODO: Possibly change key
   const lines = [
       (<g key={1}>
-        <HourLine xPosition={leftBoundPos} />
+        <BoundLine xPosition={leftBoundPos} />
         <text className={classes.label} x={leftBoundPos} y={height - 0.5 * defaultHourViewLabelFontSize}>
           {leftBoundLabel}
         </text>
       </g>),
       (<g key={2}>
-        <HourLine xPosition={rightBoundPos} />
+        <BoundLine xPosition={rightBoundPos} />
         <text className={classes.label} x={rightBoundPos} y={height - 0.5 * defaultHourViewLabelFontSize}>
           {rightBoundLabel}
         </text>
       </g>)
   ];
 
-  return <g>{lines}</g>
+  return lines;
 }
