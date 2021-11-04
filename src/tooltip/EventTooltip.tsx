@@ -27,7 +27,7 @@ export const EventTooltip = ({ type, y, parentWidth, text, triggerRef, classes, 
         const tooltipX = type === 'period' ? 0 : type.singleEventX - xOffset
 
         const tooltipYPadding = 12;
-        const bottomPadding = 24;
+        const bottomPadding = 30;
         const tooltipY = y - yOffset - tooltipYPadding + bottomPadding;
         const baseY = y - yOffset - baseHeight - tooltipYPadding
 
