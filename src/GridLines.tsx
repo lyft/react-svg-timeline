@@ -257,13 +257,22 @@ const defaultHourViewLabelFontSize = 10
 
 const useHourViewStyles = makeStyles((theme: Theme) => ({
   ...gridLineStyle(theme),
-  label: (xAxisTheme: XAxisTheme) => ({
+  leftLabel: (xAxisTheme: XAxisTheme) => ({
     fill: xAxisTheme.labelColor,
     opacity: 0.5,
     fontFamily: theme.typography.caption.fontFamily,
     fontSize: xAxisTheme.hourLabelFontSize ? xAxisTheme.hourLabelFontSize : defaultHourViewLabelFontSize,
     fontWeight: xAxisTheme.hourLabelFontWeight ? xAxisTheme.hourLabelFontWeight : 'bold',
-    textAnchor: 'middle',
+    textAnchor: 'start',
+    cursor: 'default',
+  }),
+  rightLabel: (xAxisTheme: XAxisTheme) => ({
+    fill: xAxisTheme.labelColor,
+    opacity: 0.5,
+    fontFamily: theme.typography.caption.fontFamily,
+    fontSize: xAxisTheme.hourLabelFontSize ? xAxisTheme.hourLabelFontSize : defaultHourViewLabelFontSize,
+    fontWeight: xAxisTheme.hourLabelFontWeight ? xAxisTheme.hourLabelFontWeight : 'bold',
+    textAnchor: 'end',
     cursor: 'default',
   }),
 }))
@@ -295,13 +304,13 @@ const HourView = ({ height, domain, timeScale }: HourViewProps) => {
   const lines = [
       (<g key={1}>
         <HourLine xPosition={leftBoundPos} />
-        <text className={classes.label} x={leftBoundPos} y={height - 0.5 * defaultHourViewLabelFontSize}>
+        <text className={classes.leftLabel} x={leftBoundPos} y={height - 0.5 * defaultHourViewLabelFontSize}>
           {leftBoundLabel}
         </text>
       </g>),
       (<g key={2}>
         <HourLine xPosition={rightBoundPos} />
-        <text className={classes.label} x={rightBoundPos} y={height - 0.5 * defaultHourViewLabelFontSize}>
+        <text className={classes.rightLabel} x={rightBoundPos} y={height - 0.5 * defaultHourViewLabelFontSize}>
           {rightBoundLabel}
         </text>
       </g>)
