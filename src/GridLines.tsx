@@ -282,7 +282,7 @@ const getTimelineBoundsLabel = (date: Date) => {
   // +1 because months start at 0
   const month = date.getMonth() + 1;
   const day = date.getDate();
-  const label = `${month}/${day} @ ${time}`;
+  const label = `${month}/${day} ${time}`;
   return label;
 }
 
