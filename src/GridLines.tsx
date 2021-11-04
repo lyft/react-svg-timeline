@@ -25,6 +25,7 @@ const gridLineStyle = (theme: Theme) => ({
 })
 
 export const GridLines = ({ height, domain, smallerZoomScale, timeScale, weekStripes }: Props) => {
+  console.log(smallerZoomScale);
   switch (smallerZoomScale) {
     case ZoomLevels.TEN_YEARS:
       return <YearView height={height} domain={domain} timeScale={timeScale} showDecadesOnly={true} />
