@@ -241,7 +241,7 @@ const HourLine = ({ xPosition, height }: HourLineProps) => {
       y1={0}
       x2={xPosition}
       y2={height ? height : '80%'}
-      strokeWidth={1} // slightly fatter year boundary
+      strokeWidth={1}
     />
   )
 }
