@@ -281,9 +281,16 @@ const boundViewLines = ({ height, domain, timeScale }: BoundViewProps) => {
   const xAxisTheme = useTimelineTheme().xAxis
   const classes = useHourViewStyles(xAxisTheme)
 
+  let leftBoundMs = domain[0] + TEN_SECOND_OFFSET_MS;
+  let rightBoundMs = domain[1] - TEN_SECOND_OFFSET_MS;
+
+  if (domain[0] === domain[1]) {
+    leftBoundMs -= TEN_SECOND_OFFSET_MS * 2;
+    rightBoundMs += TEN_SECOND_OFFSET_MS * 2;
+  }
+  console.log(domain[0]);
+  console.log(domain[1]);
   // Scale the bounds slightly inside so they don't touch the edges
-  const leftBoundMs = domain[0] + TEN_SECOND_OFFSET_MS;
-  const rightBoundMs = domain[1] - TEN_SECOND_OFFSET_MS;
 
   const leftBoundLabel = getTimelineBoundsLabel(new Date(leftBoundMs));
   const rightBoundLabel = getTimelineBoundsLabel(new Date(rightBoundMs));
