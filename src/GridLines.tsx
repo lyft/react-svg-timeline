@@ -288,8 +288,6 @@ const boundViewLines = ({ height, domain, timeScale }: BoundViewProps) => {
     leftBoundMs -= TEN_SECOND_OFFSET_MS * 2;
     rightBoundMs += TEN_SECOND_OFFSET_MS * 2;
   }
-  console.log(domain[0]);
-  console.log(domain[1]);
   // Scale the bounds slightly inside so they don't touch the edges
 
   const leftBoundLabel = getTimelineBoundsLabel(new Date(leftBoundMs));
