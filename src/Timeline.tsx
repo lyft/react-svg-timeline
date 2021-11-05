@@ -147,8 +147,8 @@ export const Timeline = <EID extends string, LID extends string, E extends Timel
     )
 
     const isNoEventSelected = eventsInsideDomain.filter((e) => e.isSelected).length === 0
-      console.log(isNoEventSelected);
-      
+      console.log(eventsInsideDomain);
+
     const isZoomInPossible = smallerZoomScale !== 'minimum'
     const isZoomOutPossible = currentDomainWidth < maxDomainWidth
     const isAnimationInProgress = animation !== 'none'
