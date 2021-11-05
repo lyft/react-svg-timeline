@@ -42,6 +42,7 @@ export interface TimelineProps<EID extends string, LID extends string, E extends
   cursorColor?: string
   tooltipArrow?: boolean
   animationDuration?: number
+  emptyMessage?: string
 }
 
 type Animation =
@@ -146,7 +147,8 @@ export const Timeline = <EID extends string, LID extends string, E extends Timel
     )
 
     const isNoEventSelected = eventsInsideDomain.filter((e) => e.isSelected).length === 0
-
+      console.log(isNoEventSelected);
+      
     const isZoomInPossible = smallerZoomScale !== 'minimum'
     const isZoomOutPossible = currentDomainWidth < maxDomainWidth
     const isAnimationInProgress = animation !== 'none'
