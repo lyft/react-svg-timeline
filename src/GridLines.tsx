@@ -252,7 +252,7 @@ const WeekStripes = ({ monthStart, timeScale }: WeekStripesProps) => {
 interface BoundLineProps {
   xPosition: number
   height?: string
-  classes?: any
+  classes: any
 }
 
 const BoundLine = ({ xPosition, height, classes }: BoundLineProps) => {
@@ -328,7 +328,6 @@ const getEmptyEventsText = (height: number, domain: Domain, timeScale: ScaleLine
   const midPoint = (timeScale(domain[0])! + timeScale(domain[1])!) / 2
 
   return (<g key={3}>
-        <BoundLine xPosition={midPoint} />
         <text className={classes.message} x={midPoint} y={height - 0.5 * defaultEmptyEventsMessageFontSize}>
           {emptyEventsMessage}
         </text>
