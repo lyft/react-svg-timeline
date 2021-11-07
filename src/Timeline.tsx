@@ -150,6 +150,7 @@ export const Timeline = <EID extends string, LID extends string, E extends Timel
     )
 
     const isNoEventSelected = eventsInsideDomain.filter((e) => e.isSelected).length === 0
+    console.log(eventsInsideDomain)
     const noEventsInDomain = eventsInsideDomain.length === 0
 
     const isZoomInPossible = smallerZoomScale !== 'minimum'
