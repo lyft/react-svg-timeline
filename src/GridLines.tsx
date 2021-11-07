@@ -244,7 +244,6 @@ interface BoundLineProps {
 }
 
 const BoundLine = ({ xPosition, height, classes }: BoundLineProps) => {
-  const xAxisTheme = useTimelineTheme().xAxis
   return (
     <line
       className={classes.line}
