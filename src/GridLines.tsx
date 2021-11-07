@@ -84,6 +84,7 @@ export const GridLines = ({ height, domain, smallerZoomScale, timeScale, weekStr
   }
   // If there are no events to display, add some text that says so
   if (noEventsInDomain && emptyEventsMessage) {
+    console.log("pushing empty text events")
     svgGroups.push(getEmptyEventsText(height, domain, timeScale, emptyEventsMessage, styles))
   }
 
@@ -288,7 +289,6 @@ const getTimelineBoundsLabel = (date: Date) => {
 }
 
 const boundViewLines = ({ height, domain, timeScale, classes }: ViewProps) => {
-  console.log(classes)
   let leftBoundMs = domain[0] + TEN_SECOND_OFFSET_MS
   let rightBoundMs = domain[1] - TEN_SECOND_OFFSET_MS
 
