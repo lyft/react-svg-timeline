@@ -54,12 +54,15 @@ type Animation =
       toDomain: Domain
     }>
 
+const defaultTimeMin = Date.now() - 100000
+const defaultTimeMax = Date.now()
+
 export const calcMaxDomain = <EID extends string, LID extends string, E extends TimelineEvent<EID, LID>>(
   events: ReadonlyArray<E>
 ): Domain => {
-  const timeMin = Math.min(...events.map((e) => e.startTimeMillis))
+  const timeMin = Math.min(...events.map((e) => e.startTimeMillis)) 
   const timeMax = Math.max(...events.map((e) => (e.endTimeMillis === undefined ? e.startTimeMillis : e.endTimeMillis)))
-  return [timeMin || NaN, timeMax || NaN]
+  return [timeMin ? timeMin : defaultTimeMin, timeMax ? timeMax : defaultTimeMax]
 }
 
 export const Timeline = <EID extends string, LID extends string, E extends TimelineEvent<EID, LID>>({
@@ -150,8 +153,7 @@ export const Timeline = <EID extends string, LID extends string, E extends Timel
     )
 
     const isNoEventSelected = eventsInsideDomain.filter((e) => e.isSelected).length === 0
-    console.log(eventsInsideDomain)
-    const noEventsInDomain = eventsInsideDomain.length === 0
+    const noEventsInDomain = events.length === 0 ? true : eventsInsideDomain.length === 0
 
     const isZoomInPossible = smallerZoomScale !== 'minimum'
     const isZoomOutPossible = currentDomainWidth < maxDomainWidth
