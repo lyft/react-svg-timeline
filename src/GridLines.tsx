@@ -31,18 +31,18 @@ export const GridLines = ({ height, domain, smallerZoomScale, timeScale, weekStr
   let svgGroups = []
   switch (smallerZoomScale) {
     case ZoomLevels.TEN_YEARS:
-      svgGroups.push(yearViewLines({height:height, domain:domain, timeScale:timeScale, showDecadesOnly:true}))
+      svgGroups.push(...yearViewLines({height:height, domain:domain, timeScale:timeScale, showDecadesOnly:true}))
       break
     case ZoomLevels.ONE_YEAR:
-      svgGroups.push(yearViewLines({height:height, domain:domain, timeScale:timeScale}))
+      svgGroups.push(...yearViewLines({height:height, domain:domain, timeScale:timeScale}))
       break
     default:
-      svgGroups.push(monthViewLines({height:height, domain:domain, timeScale:timeScale, showWeekStripes:weekStripes === undefined ? true : weekStripes}))
+      svgGroups.push(...monthViewLines({height:height, domain:domain, timeScale:timeScale, showWeekStripes:weekStripes === undefined ? true : weekStripes}))
       break
   }
   // If there are no events to display, add some text that says so
   if (noEventsInDomain && emptyEventsMessage) {
-    svgGroups.push(getEmptyEventsText({height, domain, timeScale, emptyEventsMessage}))
+    svgGroups.push(getEmptyEventsText(height, domain, timeScale, emptyEventsMessage))
   }
 
   if (showBounds) {
@@ -339,7 +339,7 @@ const useEmptyEventsMessageStyles = makeStyles((theme: Theme) => ({
   }),
 }))
 
-const getEmptyEventsText = ({ height, domain, timeScale, emptyEventsMessage }) => {
+const getEmptyEventsText = (height, domain, timeScale, emptyEventsMessage) => {
   const xAxisTheme = useTimelineTheme().xAxis
   const classes = useEmptyEventsMessageStyles(xAxisTheme)
   const midPoint = (timeScale(domain[0])! + timeScale(domain[1])!) / 2
