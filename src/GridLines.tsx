@@ -166,7 +166,7 @@ const monthViewLines = ({ height, domain, timeScale, showWeekStripes = false }: 
     const isLast = index === monthNumbers.length - 1
     return (
       <g key={rawMonth}>
-        {showWeekStripes && <WeekStripes monthStart={monthTimestamp} timeScale={timeScale} />}
+        {showWeekStripes && WeekStripes({monthStart:monthTimestamp, timeScale:timeScale})}
         <MonthLine x={x} month={month} />
         <text className={classes.label} x={xMidMonth} y={height - 1.5 * monthViewLabelFontSize}>
           {monthName}
