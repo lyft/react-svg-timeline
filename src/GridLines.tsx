@@ -48,7 +48,7 @@ export const GridLines = ({ height, domain, smallerZoomScale, timeScale, weekStr
     svgGroups.push(...boundLines);
   }
 
-  return svgGroups;
+  return (<g>{svgGroups}</g>);
 }
 
 /* ·················································································································· */
