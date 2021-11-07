@@ -31,13 +31,13 @@ export const GridLines = ({ height, domain, smallerZoomScale, timeScale, weekStr
   let svgGroups = []
   switch (smallerZoomScale) {
     case ZoomLevels.TEN_YEARS:
-      svgGroups = <YearView height={height} domain={domain} timeScale={timeScale} showDecadesOnly={true} />
+      svgGroups.push(yearViewLines({height:height, domain:domain, timeScale:timeScale, showDecadesOnly:true}))
       break
     case ZoomLevels.ONE_YEAR:
-      svgGroups = <YearView height={height} domain={domain} timeScale={timeScale} />
+      svgGroups.push(yearViewLines({height:height, domain:domain, timeScale:timeScale}))
       break
     default:
-      svgGroups = <MonthView height={height} domain={domain} timeScale={timeScale} showWeekStripes={weekStripes === undefined ? true : weekStripes} />
+      svgGroups.push(monthViewLines({height:height, domain:domain, timeScale:timeScale, showWeekStripes:weekStripes === undefined ? true : weekStripes}))
       break
   }
   // If there are no events to display, add some text that says so
@@ -74,7 +74,7 @@ interface YearViewProps extends Omit<Props, 'smallerZoomScale'> {
   showDecadesOnly?: boolean
 }
 
-const YearView = ({ height, domain, timeScale, showDecadesOnly = false }: YearViewProps) => {
+const yearViewLines = ({ height, domain, timeScale, showDecadesOnly = false }: YearViewProps) => {
   const xAxisTheme: XAxisTheme = useTimelineTheme().xAxis
   const classes = useYearViewStyles(xAxisTheme)
 
@@ -108,7 +108,7 @@ const YearView = ({ height, domain, timeScale, showDecadesOnly = false }: YearVi
     )
   })
 
-  return <g>{lines}</g>
+  return lines
 }
 
 /* ·················································································································· */
@@ -135,7 +135,7 @@ interface MonthViewProps extends Omit<Props, 'smallerZoomScale'> {
   showWeekStripes?: boolean
 }
 
-const MonthView = ({ height, domain, timeScale, showWeekStripes = false }: MonthViewProps) => {
+const monthViewLines = ({ height, domain, timeScale, showWeekStripes = false }: MonthViewProps) => {
   const xAxisTheme = useTimelineTheme().xAxis
   const classes = useMonthViewStyles(xAxisTheme)
 
@@ -179,7 +179,7 @@ const MonthView = ({ height, domain, timeScale, showWeekStripes = false }: Month
     )
   })
 
-  return <g>{lines}</g>
+  return lines
 }
 
 interface MonthLineProps {
@@ -230,7 +230,7 @@ const WeekStripes = ({ monthStart, timeScale }: WeekStripesProps) => {
     }
   })
 
-  return <g>{lines}</g>
+  return lines
 }
 
 /* ·················································································································· */
@@ -344,10 +344,10 @@ const getEmptyEventsText = ({ height, domain, timeScale, emptyEventsMessage }) =
   const classes = useEmptyEventsMessageStyles(xAxisTheme)
   const midPoint = (timeScale(domain[0])! + timeScale(domain[1])!) / 2
 
-  return [(<g key={1}>
+  return (<g key={3}>
         <BoundLine xPosition={midPoint} />
         <text className={classes.message} x={midPoint} y={height - 0.5 * defaultEmptyEventsMessageFontSize}>
           {emptyEventsMessage}
         </text>
-      </g>)]
+      </g>)
 }
