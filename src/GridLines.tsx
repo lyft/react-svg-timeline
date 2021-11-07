@@ -59,7 +59,7 @@ const useGridStyles = makeStyles((theme: Theme) => ({
     fill: xAxisTheme.labelColor,
     opacity: 1,
     fontFamily: theme.typography.caption.fontFamily,
-    fontSize: xAxisTheme.yearLabelFontSize ? xAxisTheme.yearLabelFontSize : defaultEmptyEventsMessageFontSize,
+    fontSize: defaultEmptyEventsMessageFontSize,
     fontWeight: xAxisTheme.yearLabelFontWeight ? xAxisTheme.yearLabelFontWeight : 'bold',
     textAnchor: 'middle',
     cursor: 'default',
