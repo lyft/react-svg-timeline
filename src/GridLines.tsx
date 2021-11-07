@@ -16,6 +16,9 @@ interface Props {
   smallerZoomScale: ZoomLevels
   timeScale: ScaleLinear<number, number>
   weekStripes?: boolean
+  showBounds?: boolean
+  noEventsInDomain?: boolean
+  emptyEventsMessage?: string
 }
 
 const gridLineStyle = (theme: Theme) => ({
@@ -24,17 +27,28 @@ const gridLineStyle = (theme: Theme) => ({
   },
 })
 
-export const GridLines = ({ height, domain, smallerZoomScale, timeScale, weekStripes }: Props) => {
+export const GridLines = ({ height, domain, smallerZoomScale, timeScale, weekStripes, showBounds, noEventsInDomain, emptyEventsMessage }: Props) => {
+  let svgGroups = []
   switch (smallerZoomScale) {
     case ZoomLevels.TEN_YEARS:
-      return <YearView height={height} domain={domain} timeScale={timeScale} showDecadesOnly={true} />
+      svgGroups = <YearView height={height} domain={domain} timeScale={timeScale} showDecadesOnly={true} />
     case ZoomLevels.ONE_YEAR:
-      return <YearView height={height} domain={domain} timeScale={timeScale} />
+      svgGroups = <YearView height={height} domain={domain} timeScale={timeScale} />
     default:
-      return (
-        <MonthView height={height} domain={domain} timeScale={timeScale} showWeekStripes={weekStripes === undefined ? true : weekStripes} />
-      )
+      svgGroups = <MonthView height={height} domain={domain} timeScale={timeScale} showWeekStripes={weekStripes === undefined ? true : weekStripes} />
   }
+  // If there are no events to display, add some text that says so
+  if (noEventsInDomain && emptyEventsMessage) {
+    svgGroups.push(getEmptyEventsText({height, domain, timeScale, emptyEventsMessage}));
+  }
+
+  if (showBounds) {
+    // Add in boundary lines in addition to other lines
+    const boundLines = boundViewLines({height, domain, timeScale});
+    svgGroups.push(...boundLines);
+  }
+
+  return svgGroups;
 }
 
 /* ·················································································································· */
@@ -91,9 +105,6 @@ const YearView = ({ height, domain, timeScale, showDecadesOnly = false }: YearVi
     )
   })
 
-  // Add in boundary lines in addition to other lines
-  const boundLines = boundViewLines({height, domain, timeScale});
-  lines.push(...boundLines);
   return <g>{lines}</g>
 }
 
@@ -165,9 +176,6 @@ const MonthView = ({ height, domain, timeScale, showWeekStripes = false }: Month
     )
   })
 
-  // Add in boundary lines in addition to other lines
-  const boundLines = boundViewLines({height, domain, timeScale});
-  lines.push(...boundLines);
   return <g>{lines}</g>
 }
 
@@ -247,7 +255,7 @@ const BoundLine = ({ xPosition, height }: BoundLineProps) => {
 }
 
 const TEN_SECOND_OFFSET_MS = 10000;
-interface BoundViewProps {
+interface ViewProps {
   height: number
   domain: [number, number]
   timeScale: ScaleLinear<number, number>
@@ -277,7 +285,7 @@ const getTimelineBoundsLabel = (date: Date) => {
   return label;
 }
 
-const boundViewLines = ({ height, domain, timeScale }: BoundViewProps) => {
+const boundViewLines = ({ height, domain, timeScale }: ViewProps) => {
   const xAxisTheme = useTimelineTheme().xAxis
   const classes = useHourViewStyles(xAxisTheme)
 
@@ -312,4 +320,31 @@ const boundViewLines = ({ height, domain, timeScale }: BoundViewProps) => {
   ];
 
   return lines;
+}
+
+const defaultEmptyEventsMessageFontSize = 16;
+
+const useEmptyEventsMessageStyles = makeStyles((theme: Theme) => ({
+  message: (xAxisTheme: XAxisTheme) => ({
+    fill: xAxisTheme.labelColor,
+    opacity: 0.75,
+    fontFamily: theme.typography.caption.fontFamily,
+    fontSize: xAxisTheme.yearLabelFontSize ? xAxisTheme.yearLabelFontSize : defaultEmptyEventsMessageFontSize,
+    fontWeight: xAxisTheme.yearLabelFontWeight ? xAxisTheme.yearLabelFontWeight : 'bold',
+    textAnchor: 'middle',
+    cursor: 'default',
+  }),
+}))
+
+const getEmptyEventsText = ({ height, domain, timeScale, emptyEventsMessage }) => {
+  const xAxisTheme = useTimelineTheme().xAxis
+  const classes = useEmptyEventsMessageStyles(xAxisTheme)
+  const midPoint = (timeScale(domain[0])! + timeScale(domain[1])!) / 2
+
+  return (<g key={1}>
+        <BoundLine xPosition={midPoint} />
+        <text className={classes.message} x={midPoint} y={height - 0.5 * defaultEmptyEventsMessageFontSize}>
+          {emptyEventsMessage}
+        </text>
+      </g>);
 }

@@ -42,7 +42,8 @@ export interface TimelineProps<EID extends string, LID extends string, E extends
   cursorColor?: string
   tooltipArrow?: boolean
   animationDuration?: number
-  emptyMessage?: string
+  showBounds?: boolean
+  emptyEventsMessage?: string
 }
 
 type Animation =
@@ -87,6 +88,8 @@ export const Timeline = <EID extends string, LID extends string, E extends Timel
   cursorColor,
   tooltipArrow = true,
   animationDuration = 1000,
+  showBounds = true,
+  emptyEventsMessage = 'No events in selected time range',
 }: TimelineProps<EID, LID, E>) => {
   {
     const maxDomain = customRange ?? calcMaxDomain(events)
@@ -147,7 +150,7 @@ export const Timeline = <EID extends string, LID extends string, E extends Timel
     )
 
     const isNoEventSelected = eventsInsideDomain.filter((e) => e.isSelected).length === 0
-      console.log(eventsInsideDomain);
+    const noEventsInDomain = eventsInsideDomain.length === 0
 
     const isZoomInPossible = smallerZoomScale !== 'minimum'
     const isZoomOutPossible = currentDomainWidth < maxDomainWidth
@@ -289,6 +292,9 @@ export const Timeline = <EID extends string, LID extends string, E extends Timel
                         smallerZoomScale={smallerZoomScale}
                         timeScale={timeScale}
                         weekStripes={weekStripes}
+                        showBounds={showBounds}
+                        noEventsInDomain={noEventsInDomain}
+                        emptyEventsMessage={emptyEventsMessage}
                       />
                       {showMarks && (
                         <>
