@@ -47,8 +47,7 @@ export const GridLines = ({ height, domain, smallerZoomScale, timeScale, weekStr
 
   if (showBounds) {
     // Add in boundary lines in addition to other lines
-    const boundLines = boundViewLines({height, domain, timeScale})
-    svgGroups.push(...boundLines)
+    svgGroups.push(...boundViewLines({height, domain, timeScale}))
   }
 
   return (<g>{svgGroups}</g>)
