@@ -321,13 +321,13 @@ const boundViewLines = ({ height, domain, timeScale, classes }: ViewProps) => {
   return lines
 }
 
-const defaultEmptyEventsMessageFontSize = 20
+const defaultEmptyEventsMessageFontSize = 25
 
 const getEmptyEventsText = (height: number, domain: Domain, timeScale: ScaleLinear<number, number>, emptyEventsMessage: string, classes: any) => {
   const midPoint = (timeScale(domain[0])! + timeScale(domain[1])!) / 2
 
   return (<g key={3}>
-        <text className={classes.message} x={midPoint} y={height - 1.5 * defaultEmptyEventsMessageFontSize}>
+        <text className={classes.message} x={midPoint} y={height - 2.5 * defaultEmptyEventsMessageFontSize}>
           {emptyEventsMessage}
         </text>
       </g>)
