@@ -89,7 +89,7 @@ export const GridLines = ({ height, domain, smallerZoomScale, timeScale, weekStr
 
   if (showBounds) {
     // Add in boundary lines in addition to other lines
-    svgGroups.push(...boundViewLines({height, domain, timeScale, styles}))
+    svgGroups.push(...boundViewLines({height, domain, timeScale, classes:styles}))
   }
 
   return (<g>{svgGroups}</g>)
@@ -273,7 +273,7 @@ interface ViewProps {
   height: number
   domain: [number, number]
   timeScale: ScaleLinear<number, number>
-  styles: any
+  classes: any
 }
 
 const defaultHourViewLabelFontSize = 10
@@ -287,7 +287,8 @@ const getTimelineBoundsLabel = (date: Date) => {
   return label
 }
 
-const boundViewLines = ({ height, domain, timeScale, styles }: ViewProps) => {
+const boundViewLines = ({ height, domain, timeScale, classes }: ViewProps) => {
+  console.log(classes)
   let leftBoundMs = domain[0] + TEN_SECOND_OFFSET_MS
   let rightBoundMs = domain[1] - TEN_SECOND_OFFSET_MS
 
@@ -305,14 +306,14 @@ const boundViewLines = ({ height, domain, timeScale, styles }: ViewProps) => {
 
   const lines = [
       (<g key={1}>
-        <BoundLine xPosition={leftBoundPos} classes={styles} />
-        <text className={styles.boundsLabel} x={leftBoundPos} y={height - 0.5 * defaultHourViewLabelFontSize}>
+        <BoundLine xPosition={leftBoundPos} classes={classes} />
+        <text className={classes.boundsLabel} x={leftBoundPos} y={height - 0.5 * defaultHourViewLabelFontSize}>
           {leftBoundLabel}
         </text>
       </g>),
       (<g key={2}>
-        <BoundLine xPosition={rightBoundPos} classes={styles} />
-        <text className={styles.boundsLabel} x={rightBoundPos} y={height - 0.5 * defaultHourViewLabelFontSize}>
+        <BoundLine xPosition={rightBoundPos} classes={classes} />
+        <text className={classes.boundsLabel} x={rightBoundPos} y={height - 0.5 * defaultHourViewLabelFontSize}>
           {rightBoundLabel}
         </text>
       </g>)
