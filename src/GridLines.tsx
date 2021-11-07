@@ -113,6 +113,8 @@ const yearViewLines = ({ height, domain, timeScale, showDecadesOnly = false, cla
   const startYear = new Date(domain[0]).getFullYear()
   const endYear = new Date(domain[1]).getFullYear()
 
+  console.log("startYear is " + startYear)
+  console.log("endYear is " + endYear)
   // -1/+1 to get starting/ending lines, additional +1 because range end is exclusive
   const lines = range(startYear - 1, endYear + 2).map((year) => {
     const yearTimestamp = new Date(year, 0, 1).valueOf()
@@ -292,8 +294,8 @@ const boundViewLines = ({ height, domain, timeScale, classes }: ViewProps) => {
   let rightBoundMs = domain[1] - TEN_SECOND_OFFSET_MS
 
   if (domain[0] === domain[1]) {
-    leftBoundMs -= TEN_SECOND_OFFSET_MS * 2
-    rightBoundMs += TEN_SECOND_OFFSET_MS * 2
+    leftBoundMs -= TEN_SECOND_OFFSET_MS * 10
+    rightBoundMs += TEN_SECOND_OFFSET_MS * 10
   }
   // Scale the bounds slightly inside so they don't touch the edges
 
@@ -327,7 +329,7 @@ const getEmptyEventsText = (height: number, domain: Domain, timeScale: ScaleLine
   const midPoint = (timeScale(domain[0])! + timeScale(domain[1])!) / 2
 
   return (<g key={3}>
-        <text className={classes.message} x={midPoint} y={height - 2 * defaultEmptyEventsMessageFontSize}>
+        <text className={classes.message} x={midPoint} y={height - 2.25 * defaultEmptyEventsMessageFontSize}>
           {emptyEventsMessage}
         </text>
       </g>)
