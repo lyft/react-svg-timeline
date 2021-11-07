@@ -344,10 +344,10 @@ const getEmptyEventsText = ({ height, domain, timeScale, emptyEventsMessage }) =
   const classes = useEmptyEventsMessageStyles(xAxisTheme)
   const midPoint = (timeScale(domain[0])! + timeScale(domain[1])!) / 2
 
-  return (<g key={1}>
+  return [(<g key={1}>
         <BoundLine xPosition={midPoint} />
         <text className={classes.message} x={midPoint} y={height - 0.5 * defaultEmptyEventsMessageFontSize}>
           {emptyEventsMessage}
         </text>
-      </g>)
+      </g>)]
 }
