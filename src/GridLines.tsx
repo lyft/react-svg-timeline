@@ -57,7 +57,7 @@ const useGridStyles = makeStyles((theme: Theme) => ({
   }),
   message: (xAxisTheme: XAxisTheme) => ({
     fill: xAxisTheme.labelColor,
-    opacity: 0.75,
+    opacity: 1,
     fontFamily: theme.typography.caption.fontFamily,
     fontSize: xAxisTheme.yearLabelFontSize ? xAxisTheme.yearLabelFontSize : defaultEmptyEventsMessageFontSize,
     fontWeight: xAxisTheme.yearLabelFontWeight ? xAxisTheme.yearLabelFontWeight : 'bold',
@@ -84,7 +84,6 @@ export const GridLines = ({ height, domain, smallerZoomScale, timeScale, weekStr
   }
   // If there are no events to display, add some text that says so
   if (noEventsInDomain && emptyEventsMessage) {
-    console.log("pushing empty text events")
     svgGroups.push(getEmptyEventsText(height, domain, timeScale, emptyEventsMessage, styles))
   }
 
@@ -322,13 +321,13 @@ const boundViewLines = ({ height, domain, timeScale, classes }: ViewProps) => {
   return lines
 }
 
-const defaultEmptyEventsMessageFontSize = 16
+const defaultEmptyEventsMessageFontSize = 20
 
 const getEmptyEventsText = (height: number, domain: Domain, timeScale: ScaleLinear<number, number>, emptyEventsMessage: string, classes: any) => {
   const midPoint = (timeScale(domain[0])! + timeScale(domain[1])!) / 2
 
   return (<g key={3}>
-        <text className={classes.message} x={midPoint} y={height - 0.5 * defaultEmptyEventsMessageFontSize}>
+        <text className={classes.message} x={midPoint} y={height - 1.5 * defaultEmptyEventsMessageFontSize}>
           {emptyEventsMessage}
         </text>
       </g>)
