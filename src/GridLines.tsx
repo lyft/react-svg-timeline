@@ -27,29 +27,69 @@ const gridLineStyle = (theme: Theme) => ({
   },
 })
 
+const useGridStyles = makeStyles((theme: Theme) => ({
+  ...gridLineStyle(theme),
+  yearLabel: (xAxisTheme: XAxisTheme) => ({
+    fill: xAxisTheme.labelColor,
+    opacity: 0.5,
+    fontFamily: theme.typography.caption.fontFamily,
+    fontWeight: xAxisTheme.yearLabelFontWeight ? xAxisTheme.yearLabelFontWeight : 'bold',
+    textAnchor: 'middle',
+    cursor: 'default',
+  }),
+  monthLabel: (xAxisTheme: XAxisTheme) => ({
+    fill: xAxisTheme.labelColor,
+    opacity: 0.5,
+    fontFamily: theme.typography.caption.fontFamily,
+    fontSize: xAxisTheme.monthLabelFontSize ? xAxisTheme.monthLabelFontSize : monthViewLabelFontSize,
+    fontWeight: xAxisTheme.monthLabelFontWeight ? xAxisTheme.monthLabelFontWeight : 'bold',
+    textAnchor: 'middle',
+    cursor: 'default',
+  }),
+  boundsLabel: (xAxisTheme: XAxisTheme) => ({
+    fill: xAxisTheme.labelColor,
+    opacity: 0.5,
+    fontFamily: theme.typography.caption.fontFamily,
+    fontSize: xAxisTheme.hourLabelFontSize ? xAxisTheme.hourLabelFontSize : defaultHourViewLabelFontSize,
+    fontWeight: xAxisTheme.hourLabelFontWeight ? xAxisTheme.hourLabelFontWeight : 'bold',
+    textAnchor: 'middle',
+    cursor: 'default',
+  }),
+  message: (xAxisTheme: XAxisTheme) => ({
+    fill: xAxisTheme.labelColor,
+    opacity: 0.75,
+    fontFamily: theme.typography.caption.fontFamily,
+    fontSize: xAxisTheme.yearLabelFontSize ? xAxisTheme.yearLabelFontSize : defaultEmptyEventsMessageFontSize,
+    fontWeight: xAxisTheme.yearLabelFontWeight ? xAxisTheme.yearLabelFontWeight : 'bold',
+    textAnchor: 'middle',
+    cursor: 'default',
+  }),
+}))
+
 export const GridLines = ({ height, domain, smallerZoomScale, timeScale, weekStripes, showBounds, noEventsInDomain, emptyEventsMessage }: Props) => {
+  const xAxisTheme: XAxisTheme = useTimelineTheme().xAxis
+  const styles = useGridStyles(xAxisTheme)
+
   let svgGroups = []
   switch (smallerZoomScale) {
     case ZoomLevels.TEN_YEARS:
-      svgGroups.push(...yearViewLines({height:height, domain:domain, timeScale:timeScale, showDecadesOnly:true}))
+      svgGroups.push(...yearViewLines({height:height, domain:domain, timeScale:timeScale, showDecadesOnly:true, classes:styles, xAxisTheme:xAxisTheme}))
       break
     case ZoomLevels.ONE_YEAR:
-      svgGroups.push(...yearViewLines({height:height, domain:domain, timeScale:timeScale}))
+      svgGroups.push(...yearViewLines({height:height, domain:domain, timeScale:timeScale, classes: styles, xAxisTheme:xAxisTheme}))
       break
     default:
-      svgGroups.push(...monthViewLines({height:height, domain:domain, timeScale:timeScale, showWeekStripes:weekStripes === undefined ? true : weekStripes}))
+      svgGroups.push(...monthViewLines({height:height, domain:domain, timeScale:timeScale, showWeekStripes:weekStripes === undefined ? true : weekStripes, classes:styles}))
       break
   }
   // If there are no events to display, add some text that says so
   if (noEventsInDomain && emptyEventsMessage) {
-    svgGroups.push(getEmptyEventsText(height, domain, timeScale, emptyEventsMessage))
+    svgGroups.push(getEmptyEventsText(height, domain, timeScale, emptyEventsMessage, styles))
   }
 
   if (showBounds) {
     // Add in boundary lines in addition to other lines
-    const xAxisTheme = useTimelineTheme().xAxis
-    const classes = useMonthViewStyles(xAxisTheme)
-    svgGroups.push(...boundViewLines({height, domain, timeScale, classes}))
+    svgGroups.push(...boundViewLines({height, domain, timeScale, styles}))
   }
 
   return (<g>{svgGroups}</g>)
@@ -59,26 +99,14 @@ export const GridLines = ({ height, domain, smallerZoomScale, timeScale, weekStr
 /*  Year
 /* ·················································································································· */
 
-const useYearViewStyles = makeStyles((theme: Theme) => ({
-  ...gridLineStyle(theme),
-  label: (xAxisTheme: XAxisTheme) => ({
-    fill: xAxisTheme.labelColor,
-    opacity: 0.5,
-    fontFamily: theme.typography.caption.fontFamily,
-    fontWeight: xAxisTheme.yearLabelFontWeight ? xAxisTheme.yearLabelFontWeight : 'bold',
-    textAnchor: 'middle',
-    cursor: 'default',
-  }),
-}))
 
 interface YearViewProps extends Omit<Props, 'smallerZoomScale'> {
   showDecadesOnly?: boolean
+  classes: any
+  xAxisTheme: XAxisTheme
 }
 
-const yearViewLines = ({ height, domain, timeScale, showDecadesOnly = false }: YearViewProps) => {
-  const xAxisTheme: XAxisTheme = useTimelineTheme().xAxis
-  const classes = useYearViewStyles(xAxisTheme)
-
+const yearViewLines = ({ height, domain, timeScale, showDecadesOnly = false, classes, xAxisTheme }: YearViewProps) => {
   // not calendar-based (and thus not accounting for leap years), but good enough for horizontal placement of labels
   const yearWidth = yearDuration
 
@@ -97,7 +125,7 @@ const yearViewLines = ({ height, domain, timeScale, showDecadesOnly = false }: Y
       <g key={year}>
         <line className={classes.line} x1={x} y1={0} x2={x} y2={height} />
         <text
-          className={classes.label}
+          className={classes.yearLabel}
           x={xMidYear}
           y="90%"
           fontSize={fontSize}
@@ -118,28 +146,12 @@ const yearViewLines = ({ height, domain, timeScale, showDecadesOnly = false }: Y
 
 const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 const monthViewLabelFontSize = 18
-
-const useMonthViewStyles = makeStyles((theme: Theme) => ({
-  ...gridLineStyle(theme),
-  label: (xAxisTheme: XAxisTheme) => ({
-    fill: xAxisTheme.labelColor,
-    opacity: 0.5,
-    fontFamily: theme.typography.caption.fontFamily,
-    fontSize: xAxisTheme.monthLabelFontSize ? xAxisTheme.monthLabelFontSize : monthViewLabelFontSize,
-    fontWeight: xAxisTheme.monthLabelFontWeight ? xAxisTheme.monthLabelFontWeight : 'bold',
-    textAnchor: 'middle',
-    cursor: 'default',
-  }),
-}))
-
 interface MonthViewProps extends Omit<Props, 'smallerZoomScale'> {
   showWeekStripes?: boolean
+  classes: any
 }
 
-const monthViewLines = ({ height, domain, timeScale, showWeekStripes = false }: MonthViewProps) => {
-  const xAxisTheme = useTimelineTheme().xAxis
-  const classes = useMonthViewStyles(xAxisTheme)
-
+const monthViewLines = ({ height, domain, timeScale, showWeekStripes = false, classes }: MonthViewProps) => {
   // not calendar-based (fixed 30 days), but good enough for horizontal placement of labels
   const monthWidth = monthDuration
 
@@ -168,14 +180,14 @@ const monthViewLines = ({ height, domain, timeScale, showWeekStripes = false }: 
     return (
       <g key={rawMonth}>
         {showWeekStripes && WeekStripes({monthStart:monthTimestamp, timeScale:timeScale})}
-        <MonthLine x={x} month={month} />
-        <text className={classes.label} x={xMidMonth} y={height - 1.5 * monthViewLabelFontSize}>
+        <MonthLine x={x} month={month} classes={classes} />
+        <text className={classes.monthLabel} x={xMidMonth} y={height - 1.5 * monthViewLabelFontSize}>
           {monthName}
         </text>
-        <text className={classes.label} x={xMidMonth} y={height - 0.5 * monthViewLabelFontSize}>
+        <text className={classes.monthLabel} x={xMidMonth} y={height - 0.5 * monthViewLabelFontSize}>
           {year}
         </text>
-        {isLast && <MonthLine x={xLast} month={month} />}
+        {isLast && <MonthLine x={xLast} month={month} classes={classes} />}
       </g>
     )
   })
@@ -186,11 +198,10 @@ const monthViewLines = ({ height, domain, timeScale, showWeekStripes = false }: 
 interface MonthLineProps {
   x: number
   month: number
+  classes: any
 }
 
-const MonthLine = ({ x, month }: MonthLineProps) => {
-  const xAxisTheme = useTimelineTheme().xAxis
-  const classes = useMonthViewStyles(xAxisTheme)
+const MonthLine = ({ x, month, classes }: MonthLineProps) => {
   return (
     <line
       className={classes.line}
@@ -262,23 +273,10 @@ interface ViewProps {
   height: number
   domain: [number, number]
   timeScale: ScaleLinear<number, number>
-  classes: any
+  styles: any
 }
 
 const defaultHourViewLabelFontSize = 10
-
-const useHourViewStyles = makeStyles((theme: Theme) => ({
-  ...gridLineStyle(theme),
-  label: (xAxisTheme: XAxisTheme) => ({
-    fill: xAxisTheme.labelColor,
-    opacity: 0.5,
-    fontFamily: theme.typography.caption.fontFamily,
-    fontSize: xAxisTheme.hourLabelFontSize ? xAxisTheme.hourLabelFontSize : defaultHourViewLabelFontSize,
-    fontWeight: xAxisTheme.hourLabelFontWeight ? xAxisTheme.hourLabelFontWeight : 'bold',
-    textAnchor: 'middle',
-    cursor: 'default',
-  }),
-}))
 
 const getTimelineBoundsLabel = (date: Date) => {
   const time = date.toLocaleTimeString()
@@ -289,8 +287,7 @@ const getTimelineBoundsLabel = (date: Date) => {
   return label
 }
 
-const boundViewLines = ({ height, domain, timeScale, classes }: ViewProps) => {
-
+const boundViewLines = ({ height, domain, timeScale, styles }: ViewProps) => {
   let leftBoundMs = domain[0] + TEN_SECOND_OFFSET_MS
   let rightBoundMs = domain[1] - TEN_SECOND_OFFSET_MS
 
@@ -308,14 +305,14 @@ const boundViewLines = ({ height, domain, timeScale, classes }: ViewProps) => {
 
   const lines = [
       (<g key={1}>
-        <BoundLine xPosition={leftBoundPos} classes={classes} />
-        <text className={classes.label} x={leftBoundPos} y={height - 0.5 * defaultHourViewLabelFontSize}>
+        <BoundLine xPosition={leftBoundPos} classes={styles} />
+        <text className={styles.boundsLabel} x={leftBoundPos} y={height - 0.5 * defaultHourViewLabelFontSize}>
           {leftBoundLabel}
         </text>
       </g>),
       (<g key={2}>
-        <BoundLine xPosition={rightBoundPos} classes={classes} />
-        <text className={classes.label} x={rightBoundPos} y={height - 0.5 * defaultHourViewLabelFontSize}>
+        <BoundLine xPosition={rightBoundPos} classes={styles} />
+        <text className={styles.boundsLabel} x={rightBoundPos} y={height - 0.5 * defaultHourViewLabelFontSize}>
           {rightBoundLabel}
         </text>
       </g>)
@@ -326,21 +323,7 @@ const boundViewLines = ({ height, domain, timeScale, classes }: ViewProps) => {
 
 const defaultEmptyEventsMessageFontSize = 16
 
-const useEmptyEventsMessageStyles = makeStyles((theme: Theme) => ({
-  message: (xAxisTheme: XAxisTheme) => ({
-    fill: xAxisTheme.labelColor,
-    opacity: 0.75,
-    fontFamily: theme.typography.caption.fontFamily,
-    fontSize: xAxisTheme.yearLabelFontSize ? xAxisTheme.yearLabelFontSize : defaultEmptyEventsMessageFontSize,
-    fontWeight: xAxisTheme.yearLabelFontWeight ? xAxisTheme.yearLabelFontWeight : 'bold',
-    textAnchor: 'middle',
-    cursor: 'default',
-  }),
-}))
-
-const getEmptyEventsText = (height: number, domain: Domain, timeScale: ScaleLinear<number, number>, emptyEventsMessage: string) => {
-  const xAxisTheme = useTimelineTheme().xAxis
-  const classes = useEmptyEventsMessageStyles(xAxisTheme)
+const getEmptyEventsText = (height: number, domain: Domain, timeScale: ScaleLinear<number, number>, emptyEventsMessage: string, classes: any) => {
   const midPoint = (timeScale(domain[0])! + timeScale(domain[1])!) / 2
 
   return (<g key={3}>
