@@ -32,23 +32,26 @@ export const GridLines = ({ height, domain, smallerZoomScale, timeScale, weekStr
   switch (smallerZoomScale) {
     case ZoomLevels.TEN_YEARS:
       svgGroups = <YearView height={height} domain={domain} timeScale={timeScale} showDecadesOnly={true} />
+      break
     case ZoomLevels.ONE_YEAR:
       svgGroups = <YearView height={height} domain={domain} timeScale={timeScale} />
+      break
     default:
       svgGroups = <MonthView height={height} domain={domain} timeScale={timeScale} showWeekStripes={weekStripes === undefined ? true : weekStripes} />
+      break
   }
   // If there are no events to display, add some text that says so
   if (noEventsInDomain && emptyEventsMessage) {
-    svgGroups.push(getEmptyEventsText({height, domain, timeScale, emptyEventsMessage}));
+    svgGroups.push(getEmptyEventsText({height, domain, timeScale, emptyEventsMessage}))
   }
 
   if (showBounds) {
     // Add in boundary lines in addition to other lines
-    const boundLines = boundViewLines({height, domain, timeScale});
-    svgGroups.push(...boundLines);
+    const boundLines = boundViewLines({height, domain, timeScale})
+    svgGroups.push(...boundLines)
   }
 
-  return (<g>{svgGroups}</g>);
+  return (<g>{svgGroups}</g>)
 }
 
 /* ·················································································································· */
@@ -254,7 +257,7 @@ const BoundLine = ({ xPosition, height }: BoundLineProps) => {
   )
 }
 
-const TEN_SECOND_OFFSET_MS = 10000;
+const TEN_SECOND_OFFSET_MS = 10000
 interface ViewProps {
   height: number
   domain: [number, number]
@@ -277,29 +280,29 @@ const useHourViewStyles = makeStyles((theme: Theme) => ({
 }))
 
 const getTimelineBoundsLabel = (date: Date) => {
-  const time = date.toLocaleTimeString();
+  const time = date.toLocaleTimeString()
   // +1 because months start at 0
-  const month = date.getMonth() + 1;
-  const day = date.getDate();
-  const label = `${month}/${day} ${time}`;
-  return label;
+  const month = date.getMonth() + 1
+  const day = date.getDate()
+  const label = `${month}/${day} ${time}`
+  return label
 }
 
 const boundViewLines = ({ height, domain, timeScale }: ViewProps) => {
   const xAxisTheme = useTimelineTheme().xAxis
   const classes = useHourViewStyles(xAxisTheme)
 
-  let leftBoundMs = domain[0] + TEN_SECOND_OFFSET_MS;
-  let rightBoundMs = domain[1] - TEN_SECOND_OFFSET_MS;
+  let leftBoundMs = domain[0] + TEN_SECOND_OFFSET_MS
+  let rightBoundMs = domain[1] - TEN_SECOND_OFFSET_MS
 
   if (domain[0] === domain[1]) {
-    leftBoundMs -= TEN_SECOND_OFFSET_MS * 2;
-    rightBoundMs += TEN_SECOND_OFFSET_MS * 2;
+    leftBoundMs -= TEN_SECOND_OFFSET_MS * 2
+    rightBoundMs += TEN_SECOND_OFFSET_MS * 2
   }
   // Scale the bounds slightly inside so they don't touch the edges
 
-  const leftBoundLabel = getTimelineBoundsLabel(new Date(leftBoundMs));
-  const rightBoundLabel = getTimelineBoundsLabel(new Date(rightBoundMs));
+  const leftBoundLabel = getTimelineBoundsLabel(new Date(leftBoundMs))
+  const rightBoundLabel = getTimelineBoundsLabel(new Date(rightBoundMs))
 
   const leftBoundPos = timeScale(leftBoundMs)!
   const rightBoundPos = timeScale(rightBoundMs)!
@@ -317,12 +320,12 @@ const boundViewLines = ({ height, domain, timeScale }: ViewProps) => {
           {rightBoundLabel}
         </text>
       </g>)
-  ];
+  ]
 
-  return lines;
+  return lines
 }
 
-const defaultEmptyEventsMessageFontSize = 16;
+const defaultEmptyEventsMessageFontSize = 16
 
 const useEmptyEventsMessageStyles = makeStyles((theme: Theme) => ({
   message: (xAxisTheme: XAxisTheme) => ({
@@ -346,5 +349,5 @@ const getEmptyEventsText = ({ height, domain, timeScale, emptyEventsMessage }) =
         <text className={classes.message} x={midPoint} y={height - 0.5 * defaultEmptyEventsMessageFontSize}>
           {emptyEventsMessage}
         </text>
-      </g>);
+      </g>)
 }
