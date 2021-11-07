@@ -339,7 +339,7 @@ const useEmptyEventsMessageStyles = makeStyles((theme: Theme) => ({
   }),
 }))
 
-const getEmptyEventsText = (height, domain, timeScale, emptyEventsMessage) => {
+const getEmptyEventsText = (height: number, domain, timeScale, emptyEventsMessage) => {
   const xAxisTheme = useTimelineTheme().xAxis
   const classes = useEmptyEventsMessageStyles(xAxisTheme)
   const midPoint = (timeScale(domain[0])! + timeScale(domain[1])!) / 2
