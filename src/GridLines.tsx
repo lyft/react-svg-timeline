@@ -47,7 +47,9 @@ export const GridLines = ({ height, domain, smallerZoomScale, timeScale, weekStr
 
   if (showBounds) {
     // Add in boundary lines in addition to other lines
-    svgGroups.push(...boundViewLines({height, domain, timeScale}))
+    const xAxisTheme = useTimelineTheme().xAxis
+    const classes = useMonthViewStyles(xAxisTheme)
+    svgGroups.push(...boundViewLines({height, domain, timeScale, classes}))
   }
 
   return (<g>{svgGroups}</g>)
@@ -260,6 +262,7 @@ interface ViewProps {
   height: number
   domain: [number, number]
   timeScale: ScaleLinear<number, number>
+  classes: any
 }
 
 const defaultHourViewLabelFontSize = 10
@@ -286,9 +289,7 @@ const getTimelineBoundsLabel = (date: Date) => {
   return label
 }
 
-const boundViewLines = ({ height, domain, timeScale }: ViewProps) => {
-  const xAxisTheme = useTimelineTheme().xAxis
-  const classes = useHourViewStyles(xAxisTheme)
+const boundViewLines = ({ height, domain, timeScale, classes }: ViewProps) => {
 
   let leftBoundMs = domain[0] + TEN_SECOND_OFFSET_MS
   let rightBoundMs = domain[1] - TEN_SECOND_OFFSET_MS
