@@ -240,11 +240,11 @@ const WeekStripes = ({ monthStart, timeScale }: WeekStripesProps) => {
 interface BoundLineProps {
   xPosition: number
   height?: string
+  classes?: any
 }
 
-const BoundLine = ({ xPosition, height }: BoundLineProps) => {
+const BoundLine = ({ xPosition, height, classes }: BoundLineProps) => {
   const xAxisTheme = useTimelineTheme().xAxis
-  const classes = useHourViewStyles(xAxisTheme)
   return (
     <line
       className={classes.line}
@@ -309,13 +309,13 @@ const boundViewLines = ({ height, domain, timeScale }: ViewProps) => {
 
   const lines = [
       (<g key={1}>
-        <BoundLine xPosition={leftBoundPos} />
+        <BoundLine xPosition={leftBoundPos} classes={classes} />
         <text className={classes.label} x={leftBoundPos} y={height - 0.5 * defaultHourViewLabelFontSize}>
           {leftBoundLabel}
         </text>
       </g>),
       (<g key={2}>
-        <BoundLine xPosition={rightBoundPos} />
+        <BoundLine xPosition={rightBoundPos} classes={classes} />
         <text className={classes.label} x={rightBoundPos} y={height - 0.5 * defaultHourViewLabelFontSize}>
           {rightBoundLabel}
         </text>
