@@ -60,9 +60,13 @@ const defaultTimeMax = Date.now()
 export const calcMaxDomain = <EID extends string, LID extends string, E extends TimelineEvent<EID, LID>>(
   events: ReadonlyArray<E>
 ): Domain => {
-  const timeMin = Math.min(...events.map((e) => e.startTimeMillis)) 
+  if (events.length === 0) {
+    return [defaultTimeMin, defaultTimeMax]
+  }
+
+  const timeMin = Math.min(...events.map((e) => e.startTimeMillis))
   const timeMax = Math.max(...events.map((e) => (e.endTimeMillis === undefined ? e.startTimeMillis : e.endTimeMillis)))
-  return [timeMin ? timeMin : defaultTimeMin, timeMax ? timeMax : defaultTimeMax]
+  return [timeMin, timeMax]
 }
 
 export const Timeline = <EID extends string, LID extends string, E extends TimelineEvent<EID, LID>>({
