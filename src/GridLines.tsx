@@ -113,8 +113,6 @@ const yearViewLines = ({ height, domain, timeScale, showDecadesOnly = false, cla
   const startYear = new Date(domain[0]).getFullYear()
   const endYear = new Date(domain[1]).getFullYear()
 
-  console.log("startYear is " + startYear)
-  console.log("endYear is " + endYear)
   // -1/+1 to get starting/ending lines, additional +1 because range end is exclusive
   const lines = range(startYear - 1, endYear + 2).map((year) => {
     const yearTimestamp = new Date(year, 0, 1).valueOf()
