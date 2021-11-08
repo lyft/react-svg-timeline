@@ -43,6 +43,7 @@ export interface TimelineProps<EID extends string, LID extends string, E extends
   tooltipArrow?: boolean
   animationDuration?: number
   showBounds?: boolean
+  defaultLookBack?: number
 }
 
 type Animation =
@@ -54,11 +55,16 @@ type Animation =
     }>
 
 export const calcMaxDomain = <EID extends string, LID extends string, E extends TimelineEvent<EID, LID>>(
-  events: ReadonlyArray<E>
+  events: ReadonlyArray<E>,
+  defaultLookBack: number,
 ): Domain => {
+  if (events.length === 0) {
+    return [Date.now() - defaultLookBack, Date.now()]
+  }
+
   const timeMin = Math.min(...events.map((e) => e.startTimeMillis))
   const timeMax = Math.max(...events.map((e) => (e.endTimeMillis === undefined ? e.startTimeMillis : e.endTimeMillis)))
-  return [timeMin || NaN, timeMax || NaN]
+  return [timeMin, timeMax]
 }
 
 export const Timeline = <EID extends string, LID extends string, E extends TimelineEvent<EID, LID>>({
@@ -88,9 +94,10 @@ export const Timeline = <EID extends string, LID extends string, E extends Timel
   tooltipArrow = true,
   animationDuration = 1000,
   showBounds = true,
+  defaultLookBack = 100000,
 }: TimelineProps<EID, LID, E>) => {
   {
-    const maxDomain = customRange ?? calcMaxDomain(events)
+    const maxDomain = customRange ?? calcMaxDomain(events, defaultLookBack)
     const maxDomainStart = maxDomain[0]
     const maxDomainEnd = maxDomain[1]
 
