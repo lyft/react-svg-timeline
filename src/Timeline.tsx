@@ -42,6 +42,7 @@ export interface TimelineProps<EID extends string, LID extends string, E extends
   cursorColor?: string
   tooltipArrow?: boolean
   animationDuration?: number
+  showBounds?: boolean
 }
 
 type Animation =
@@ -86,6 +87,7 @@ export const Timeline = <EID extends string, LID extends string, E extends Timel
   cursorColor,
   tooltipArrow = true,
   animationDuration = 1000,
+  showBounds = true,
 }: TimelineProps<EID, LID, E>) => {
   {
     const maxDomain = customRange ?? calcMaxDomain(events)
@@ -287,6 +289,7 @@ export const Timeline = <EID extends string, LID extends string, E extends Timel
                         smallerZoomScale={smallerZoomScale}
                         timeScale={timeScale}
                         weekStripes={weekStripes}
+                        showBounds={showBounds}
                       />
                       {showMarks && (
                         <>

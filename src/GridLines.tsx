@@ -16,6 +16,7 @@ interface Props {
   smallerZoomScale: ZoomLevels
   timeScale: ScaleLinear<number, number>
   weekStripes?: boolean
+  showBounds?: boolean
 }
 
 const gridLineStyle = (theme: Theme) => ({
@@ -24,26 +25,9 @@ const gridLineStyle = (theme: Theme) => ({
   },
 })
 
-export const GridLines = ({ height, domain, smallerZoomScale, timeScale, weekStripes }: Props) => {
-  switch (smallerZoomScale) {
-    case ZoomLevels.TEN_YEARS:
-      return <YearView height={height} domain={domain} timeScale={timeScale} showDecadesOnly={true} />
-    case ZoomLevels.ONE_YEAR:
-      return <YearView height={height} domain={domain} timeScale={timeScale} />
-    default:
-      return (
-        <MonthView height={height} domain={domain} timeScale={timeScale} showWeekStripes={weekStripes === undefined ? true : weekStripes} />
-      )
-  }
-}
-
-/* ·················································································································· */
-/*  Year
-/* ·················································································································· */
-
-const useYearViewStyles = makeStyles((theme: Theme) => ({
+const useGridStyles = makeStyles((theme: Theme) => ({
   ...gridLineStyle(theme),
-  label: (xAxisTheme: XAxisTheme) => ({
+  yearLabel: (xAxisTheme: XAxisTheme) => ({
     fill: xAxisTheme.labelColor,
     opacity: 0.5,
     fontFamily: theme.typography.caption.fontFamily,
@@ -51,16 +35,63 @@ const useYearViewStyles = makeStyles((theme: Theme) => ({
     textAnchor: 'middle',
     cursor: 'default',
   }),
+  monthLabel: (xAxisTheme: XAxisTheme) => ({
+    fill: xAxisTheme.labelColor,
+    opacity: 0.5,
+    fontFamily: theme.typography.caption.fontFamily,
+    fontSize: xAxisTheme.monthLabelFontSize ? xAxisTheme.monthLabelFontSize : monthViewLabelFontSize,
+    fontWeight: xAxisTheme.monthLabelFontWeight ? xAxisTheme.monthLabelFontWeight : 'bold',
+    textAnchor: 'middle',
+    cursor: 'default',
+  }),
+  boundsLabel: (xAxisTheme: XAxisTheme) => ({
+    fill: xAxisTheme.labelColor,
+    opacity: 0.5,
+    fontFamily: theme.typography.caption.fontFamily,
+    fontSize: xAxisTheme.hourLabelFontSize ? xAxisTheme.hourLabelFontSize : defaultHourViewLabelFontSize,
+    fontWeight: xAxisTheme.hourLabelFontWeight ? xAxisTheme.hourLabelFontWeight : 'bold',
+    textAnchor: 'middle',
+    cursor: 'default',
+  }),
 }))
+
+export const GridLines = ({ height, domain, smallerZoomScale, timeScale, weekStripes, showBounds }: Props) => {
+  const xAxisTheme: XAxisTheme = useTimelineTheme().xAxis
+  const styles = useGridStyles(xAxisTheme)
+
+  let svgGroups = []
+  switch (smallerZoomScale) {
+    case ZoomLevels.TEN_YEARS:
+      svgGroups.push(...yearViewLines({height:height, domain:domain, timeScale:timeScale, showDecadesOnly:true, classes:styles, xAxisTheme:xAxisTheme}))
+      break
+    case ZoomLevels.ONE_YEAR:
+      svgGroups.push(...yearViewLines({height:height, domain:domain, timeScale:timeScale, classes: styles, xAxisTheme:xAxisTheme}))
+      break
+    default:
+      svgGroups.push(...monthViewLines({height:height, domain:domain, timeScale:timeScale, showWeekStripes:weekStripes === undefined ? true : weekStripes, classes:styles}))
+      break
+  }
+
+  if (showBounds) {
+    // Add in boundary lines in addition to other lines
+    svgGroups.push(...boundViewLines({height, domain, timeScale, classes:styles}))
+  }
+
+  return (<g>{svgGroups}</g>)
+}
+
+/* ·················································································································· */
+/*  Year
+/* ·················································································································· */
+
 
 interface YearViewProps extends Omit<Props, 'smallerZoomScale'> {
   showDecadesOnly?: boolean
+  classes: any
+  xAxisTheme: XAxisTheme
 }
 
-const YearView = ({ height, domain, timeScale, showDecadesOnly = false }: YearViewProps) => {
-  const xAxisTheme: XAxisTheme = useTimelineTheme().xAxis
-  const classes = useYearViewStyles(xAxisTheme)
-
+const yearViewLines = ({ height, domain, timeScale, showDecadesOnly = false, classes, xAxisTheme }: YearViewProps) => {
   // not calendar-based (and thus not accounting for leap years), but good enough for horizontal placement of labels
   const yearWidth = yearDuration
 
@@ -79,7 +110,7 @@ const YearView = ({ height, domain, timeScale, showDecadesOnly = false }: YearVi
       <g key={year}>
         <line className={classes.line} x1={x} y1={0} x2={x} y2={height} />
         <text
-          className={classes.label}
+          className={classes.yearLabel}
           x={xMidYear}
           y="90%"
           fontSize={fontSize}
@@ -91,10 +122,7 @@ const YearView = ({ height, domain, timeScale, showDecadesOnly = false }: YearVi
     )
   })
 
-  // Add in boundary lines in addition to other lines
-  const boundLines = boundViewLines({height, domain, timeScale});
-  lines.push(...boundLines);
-  return <g>{lines}</g>
+  return lines
 }
 
 /* ·················································································································· */
@@ -103,28 +131,12 @@ const YearView = ({ height, domain, timeScale, showDecadesOnly = false }: YearVi
 
 const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 const monthViewLabelFontSize = 18
-
-const useMonthViewStyles = makeStyles((theme: Theme) => ({
-  ...gridLineStyle(theme),
-  label: (xAxisTheme: XAxisTheme) => ({
-    fill: xAxisTheme.labelColor,
-    opacity: 0.5,
-    fontFamily: theme.typography.caption.fontFamily,
-    fontSize: xAxisTheme.monthLabelFontSize ? xAxisTheme.monthLabelFontSize : monthViewLabelFontSize,
-    fontWeight: xAxisTheme.monthLabelFontWeight ? xAxisTheme.monthLabelFontWeight : 'bold',
-    textAnchor: 'middle',
-    cursor: 'default',
-  }),
-}))
-
 interface MonthViewProps extends Omit<Props, 'smallerZoomScale'> {
   showWeekStripes?: boolean
+  classes: any
 }
 
-const MonthView = ({ height, domain, timeScale, showWeekStripes = false }: MonthViewProps) => {
-  const xAxisTheme = useTimelineTheme().xAxis
-  const classes = useMonthViewStyles(xAxisTheme)
-
+const monthViewLines = ({ height, domain, timeScale, showWeekStripes = false, classes }: MonthViewProps) => {
   // not calendar-based (fixed 30 days), but good enough for horizontal placement of labels
   const monthWidth = monthDuration
 
@@ -152,33 +164,29 @@ const MonthView = ({ height, domain, timeScale, showWeekStripes = false }: Month
     const isLast = index === monthNumbers.length - 1
     return (
       <g key={rawMonth}>
-        {showWeekStripes && <WeekStripes monthStart={monthTimestamp} timeScale={timeScale} />}
-        <MonthLine x={x} month={month} />
-        <text className={classes.label} x={xMidMonth} y={height - 1.5 * monthViewLabelFontSize}>
+        {showWeekStripes && WeekStripes({monthStart:monthTimestamp, timeScale:timeScale})}
+        <MonthLine x={x} month={month} classes={classes} />
+        <text className={classes.monthLabel} x={xMidMonth} y={height - 1.5 * monthViewLabelFontSize}>
           {monthName}
         </text>
-        <text className={classes.label} x={xMidMonth} y={height - 0.5 * monthViewLabelFontSize}>
+        <text className={classes.monthLabel} x={xMidMonth} y={height - 0.5 * monthViewLabelFontSize}>
           {year}
         </text>
-        {isLast && <MonthLine x={xLast} month={month} />}
+        {isLast && <MonthLine x={xLast} month={month} classes={classes} />}
       </g>
     )
   })
 
-  // Add in boundary lines in addition to other lines
-  const boundLines = boundViewLines({height, domain, timeScale});
-  lines.push(...boundLines);
-  return <g>{lines}</g>
+  return lines
 }
 
 interface MonthLineProps {
   x: number
   month: number
+  classes: any
 }
 
-const MonthLine = ({ x, month }: MonthLineProps) => {
-  const xAxisTheme = useTimelineTheme().xAxis
-  const classes = useMonthViewStyles(xAxisTheme)
+const MonthLine = ({ x, month, classes }: MonthLineProps) => {
   return (
     <line
       className={classes.line}
@@ -219,7 +227,7 @@ const WeekStripes = ({ monthStart, timeScale }: WeekStripesProps) => {
     }
   })
 
-  return <g>{lines}</g>
+  return lines
 }
 
 /* ·················································································································· */
@@ -229,11 +237,10 @@ const WeekStripes = ({ monthStart, timeScale }: WeekStripesProps) => {
 interface BoundLineProps {
   xPosition: number
   height?: string
+  classes: any
 }
 
-const BoundLine = ({ xPosition, height }: BoundLineProps) => {
-  const xAxisTheme = useTimelineTheme().xAxis
-  const classes = useHourViewStyles(xAxisTheme)
+const BoundLine = ({ xPosition, height, classes }: BoundLineProps) => {
   return (
     <line
       className={classes.line}
@@ -246,70 +253,55 @@ const BoundLine = ({ xPosition, height }: BoundLineProps) => {
   )
 }
 
-const TEN_SECOND_OFFSET_MS = 10000;
-interface BoundViewProps {
+const TEN_SECOND_OFFSET_MS = 10000
+interface ViewProps {
   height: number
   domain: [number, number]
   timeScale: ScaleLinear<number, number>
+  classes: any
 }
 
 const defaultHourViewLabelFontSize = 10
 
-const useHourViewStyles = makeStyles((theme: Theme) => ({
-  ...gridLineStyle(theme),
-  label: (xAxisTheme: XAxisTheme) => ({
-    fill: xAxisTheme.labelColor,
-    opacity: 0.5,
-    fontFamily: theme.typography.caption.fontFamily,
-    fontSize: xAxisTheme.hourLabelFontSize ? xAxisTheme.hourLabelFontSize : defaultHourViewLabelFontSize,
-    fontWeight: xAxisTheme.hourLabelFontWeight ? xAxisTheme.hourLabelFontWeight : 'bold',
-    textAnchor: 'middle',
-    cursor: 'default',
-  }),
-}))
-
 const getTimelineBoundsLabel = (date: Date) => {
-  const time = date.toLocaleTimeString();
+  const time = date.toLocaleTimeString()
   // +1 because months start at 0
-  const month = date.getMonth() + 1;
-  const day = date.getDate();
-  const label = `${month}/${day} ${time}`;
-  return label;
+  const month = date.getMonth() + 1
+  const day = date.getDate()
+  const label = `${month}/${day} ${time}`
+  return label
 }
 
-const boundViewLines = ({ height, domain, timeScale }: BoundViewProps) => {
-  const xAxisTheme = useTimelineTheme().xAxis
-  const classes = useHourViewStyles(xAxisTheme)
-
-  let leftBoundMs = domain[0] + TEN_SECOND_OFFSET_MS;
-  let rightBoundMs = domain[1] - TEN_SECOND_OFFSET_MS;
+const boundViewLines = ({ height, domain, timeScale, classes }: ViewProps) => {
+  let leftBoundMs = domain[0] + TEN_SECOND_OFFSET_MS
+  let rightBoundMs = domain[1] - TEN_SECOND_OFFSET_MS
 
   if (domain[0] === domain[1]) {
-    leftBoundMs -= TEN_SECOND_OFFSET_MS * 2;
-    rightBoundMs += TEN_SECOND_OFFSET_MS * 2;
+    leftBoundMs -= TEN_SECOND_OFFSET_MS * 10
+    rightBoundMs += TEN_SECOND_OFFSET_MS * 10
   }
   // Scale the bounds slightly inside so they don't touch the edges
 
-  const leftBoundLabel = getTimelineBoundsLabel(new Date(leftBoundMs));
-  const rightBoundLabel = getTimelineBoundsLabel(new Date(rightBoundMs));
+  const leftBoundLabel = getTimelineBoundsLabel(new Date(leftBoundMs))
+  const rightBoundLabel = getTimelineBoundsLabel(new Date(rightBoundMs))
 
   const leftBoundPos = timeScale(leftBoundMs)!
   const rightBoundPos = timeScale(rightBoundMs)!
 
   const lines = [
       (<g key={1}>
-        <BoundLine xPosition={leftBoundPos} />
-        <text className={classes.label} x={leftBoundPos} y={height - 0.5 * defaultHourViewLabelFontSize}>
+        <BoundLine xPosition={leftBoundPos} classes={classes} />
+        <text className={classes.boundsLabel} x={leftBoundPos} y={height - 0.5 * defaultHourViewLabelFontSize}>
           {leftBoundLabel}
         </text>
       </g>),
       (<g key={2}>
-        <BoundLine xPosition={rightBoundPos} />
-        <text className={classes.label} x={rightBoundPos} y={height - 0.5 * defaultHourViewLabelFontSize}>
+        <BoundLine xPosition={rightBoundPos} classes={classes} />
+        <text className={classes.boundsLabel} x={rightBoundPos} y={height - 0.5 * defaultHourViewLabelFontSize}>
           {rightBoundLabel}
         </text>
       </g>)
-  ];
+  ]
 
-  return lines;
+  return lines
 }
