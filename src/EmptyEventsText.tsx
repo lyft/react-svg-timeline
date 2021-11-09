@@ -1,6 +1,6 @@
 import * as React from 'react'
-import { useTimelineTheme } from '../theme'
-import { XAxisTheme } from '../theme/model'
+import { useTimelineTheme } from './theme'
+import { XAxisTheme } from './theme/model'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import { Theme } from '@material-ui/core'
 
