@@ -9,7 +9,7 @@ export interface TimelineEvent<EID extends string, LID extends string> {
   tooltip?: string
   isSelected?: boolean
   isPinned?: boolean
-  link?: string
+  URLlink?: string
 }
 
 export interface TimelineLane<LID extends string> {
