@@ -1,6 +1,4 @@
 import * as React from 'react'
-import { ScaleLinear } from 'd3-scale'
-import { Domain } from './model'
 import { useTimelineTheme } from '../theme'
 import { XAxisTheme } from '../theme/model'
 import makeStyles from '@material-ui/core/styles/makeStyles'
