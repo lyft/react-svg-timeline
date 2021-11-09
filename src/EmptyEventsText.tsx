@@ -3,6 +3,8 @@ import { useTimelineTheme } from './theme'
 import { XAxisTheme } from './theme/model'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import { Theme } from '@material-ui/core'
+import { Domain } from './model'
+import { ScaleLinear } from 'd3-scale'
 
 const messageStyle = makeStyles((theme: Theme) => ({
     message: (xAxisTheme: XAxisTheme) => ({
@@ -16,9 +18,16 @@ const messageStyle = makeStyles((theme: Theme) => ({
     }),
   }))
 
+interface EmptyEventsProps {
+    height: number,
+    domain: Domain,
+    timeScale: ScaleLinear<number, number>,
+    emptyEventsMessage: string,
+}
+
 const defaultEmptyEventsMessageFontSize = 30
 
-export const EmptyEventsText = ({height, domain, timeScale, emptyEventsMessage}) => {
+export const EmptyEventsText = ({height, domain, timeScale, emptyEventsMessage}: EmptyEventsProps) => {
   // TODO(smonero): remove this boilerplate style code everywhere
   const xAxisTheme: XAxisTheme = useTimelineTheme().xAxis
   const styles = messageStyle(xAxisTheme)
