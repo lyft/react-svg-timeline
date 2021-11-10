@@ -25,7 +25,7 @@ interface EmptyEventsProps {
     emptyEventsMessage: string,
 }
 
-const defaultEmptyEventsMessageFontSize = 30
+const defaultEmptyEventsMessageFontSize = 24
 
 export const EmptyEventsText = ({height, domain, timeScale, emptyEventsMessage}: EmptyEventsProps) => {
   // TODO(smonero): remove this boilerplate style code everywhere
