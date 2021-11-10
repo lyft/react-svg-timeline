@@ -125,6 +125,8 @@ export const Timeline = <EID extends string, LID extends string, E extends Timel
       [domain]
     )
 
+    const emptyEvents = eventsInsideDomain.length === 0
+
     const layerById = {
       grid: (
         <GridLines
@@ -202,7 +204,7 @@ export const Timeline = <EID extends string, LID extends string, E extends Timel
           )}
         </g>
       ),
-      emptyText: (<EmptyEventsText height={height} domain={domain} timeScale={timeScale} emptyEventsMessage={"No events in selected time range"}/>)
+      emptyText: emptyEvents && (<EmptyEventsText height={height} domain={domain} timeScale={timeScale} emptyEventsMessage={"No events in selected time range"}/>)
     }
 
     return (
