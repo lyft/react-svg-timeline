@@ -181,13 +181,7 @@ const InteractiveEventMark = <EID extends string, LID extends string, E extends 
       onMouseLeave={onMouseLeave}
       onClick={onMouseClick}
     >
-      {event.URLlink ? (
-        <a href={event.URLlink} target="_blank" rel="noreferrer noopener">
-          <g ref={triggerRef}>{children}</g>
-        </a>
-      ) : (
-        <g ref={triggerRef}>{children}</g>
-      )}
+      <g ref={triggerRef}>{children}</g>
       {event.tooltip ? (
         <EventTooltip
           type={tooltipType}
@@ -230,7 +224,7 @@ const DefaultEventMark = <EID extends string, LID extends string, E extends Time
         r={eventMarkerHeight / 2}
         className={className}
         fill={e.color || defaultEventColor}
-        style={{ stroke: strokeColor, outline: 'none' }}
+        style={{ stroke: strokeColor }}
       />
     )
   } else {
@@ -244,7 +238,7 @@ const DefaultEventMark = <EID extends string, LID extends string, E extends Time
         height={eventMarkerHeight}
         className={className}
         fill={e.color || defaultEventColor}
-        style={{ stroke: strokeColor, outline: 'none' }}
+        style={{ stroke: strokeColor }}
       />
     )
   }
