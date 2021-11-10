@@ -65,6 +65,7 @@ export const Timeline = <EID extends string, LID extends string, E extends Timel
   zoomLevels = defaultOrderedZoomLevels,
   isTrimming = false,
   trimRange,
+  layers = ['grid', 'axes', 'interaction', 'marks', 'emptyText'],
   theme,
   onEventHover = noOp,
   onEventUnhover = noOp,
@@ -112,7 +113,6 @@ export const Timeline = <EID extends string, LID extends string, E extends Timel
     )
 
     const showMarks = suppressMarkAnimation ? !isAnimationInProgress : true
-    const noEventsInDomain = eventsInsideDomain.length === 0
 
     const handleDomainChange = useCallback(
       (newDomain: Domain, animated: boolean) => {
@@ -186,6 +186,7 @@ export const Timeline = <EID extends string, LID extends string, E extends Timel
               onEventHover={onEventHoverDecorated}
               onEventUnhover={onEventUnhoverDecorated}
               onEventClick={onEventClick}
+              tooltipArrow={tooltipArrow}
             />
           ) : (
             <CollapsedMarks
@@ -201,208 +202,17 @@ export const Timeline = <EID extends string, LID extends string, E extends Timel
           )}
         </g>
       ),
+      emptyText: (<EmptyEventsText height={height} domain={domain} timeScale={timeScale} emptyEventsMessage={"No events in selected time range"}/>)
     }
 
     return (
       <TimelineThemeProvider theme={theme}>
-        <MouseAwareSvg width={width} height={height}>
-          {(mousePosition: SvgCoordinates) => {
-            const timeScalePadding = 50
-            const timeScale = scaleLinear()
-              .domain(domain)
-              .range([timeScalePadding, width - timeScalePadding])
-
-            const yScale = scaleBand()
-              .domain(lanes.map((l) => l.laneId))
-              .range([0, height])
-              .paddingInner(0.3)
-              .paddingOuter(0.8)
-
-            const timeAtCursor = timeScale.invert(mousePosition.x)
-
-            const getDomainSpan = (time: number, width: number): Domain => [
-              Math.max(maxDomainStart, time - width / 2),
-              Math.min(maxDomainEnd, time + width / 2),
-            ]
-
-            const setDomainAnimated = (newDomain: Domain) =>
-              setAnimation({ startMs: Date.now(), fromDomain: domain, toDomain: newDomain })
-
-            const updateDomain = (zoomScale: ZoomScale) => () => {
-              if (isDomainChangePossible) {
-                const newZoomWidth = zoomScaleWidth(zoomScale)
-                setDomainAnimated(getDomainSpan(timeAtCursor, newZoomWidth))
-              }
-            }
-
-            const onZoomScrub = () => {
-              if (onCursorMove) {
-                onCursorMove(timeAtCursor, ...getDomainSpan(timeAtCursor, zoomWidth))
-              }
-            }
-
-            const onZoomIn = updateDomain(smallerZoomScale)
-            const onZoomOut = updateDomain(biggerZoomScale)
-
-            const onZoomInCustom = (mouseStartX: number, mouseEndX: number) => {
-              if (isDomainChangePossible) {
-                const newMin = timeScale.invert(mouseStartX)
-                const newMax = timeScale.invert(mouseEndX)
-                setDomainAnimated([newMin, newMax])
-              }
-            }
-
-            const onZoomInCustomInProgress = (mouseStartX: number, mouseEndX: number) => {
-              if (isDomainChangePossible && onCursorMove) {
-                const newMin = timeScale.invert(mouseStartX)
-                const newMax = timeScale.invert(mouseEndX)
-                onCursorMove(newMax, newMin, newMax)
-              }
-            }
-
-            const onZoomReset = () => {
-              if (isDomainChangePossible) {
-                setDomainAnimated([maxDomainStart, maxDomainEnd])
-              }
-            }
-
-            const onPan = (pixelDelta: number) => {
-              if (isDomainChangePossible) {
-                const [domainMin, domainMax] = domain
-                const [rangeMin, rangeMax] = timeScale.range()
-                const domainDelta = (pixelDelta / (rangeMax - rangeMin)) * (domainMax - domainMin)
-                const [newDomainMin, newDomainMax] = [domainMin + domainDelta, domainMax + domainDelta]
-                if (newDomainMin > maxDomainStart && newDomainMax < maxDomainEnd) {
-                  setDomain([newDomainMin, newDomainMax])
-                }
-              }
-            }
-
-            const onEventHoverDecorated = (eventId: EID) => {
-              setIsMouseOverEvent(true)
-              onEventHover(eventId)
-            }
-
-            const onEventUnhoverDecorated = (eventId: EID) => {
-              setIsMouseOverEvent(false)
-              onEventUnhover(eventId)
-            }
-
-            const [onTrimStart, onTrimEnd] = useTrimming(maxDomain, timeScale, onTrimRangeChange, trimRange)
-
-            return (
-              <InteractionHandling
-                width={width}
-                height={height}
-                mousePosition={mousePosition}
-                isAnimationInProgress={isAnimationInProgress}
-                isZoomInPossible={isZoomInPossible}
-                isZoomOutPossible={isZoomOutPossible}
-                isTrimming={isTrimming}
-                onHover={onZoomScrub}
-                onZoomIn={onZoomIn}
-                onZoomOut={onZoomOut}
-                onZoomInCustom={onZoomInCustom}
-                onZoomInCustomInProgress={onZoomInCustomInProgress}
-                onZoomReset={onZoomReset}
-                onPan={onPan}
-                onTrimStart={onTrimStart}
-                onTrimEnd={onTrimEnd}
-                onInteractionEnd={onInteractionEnd}
-              >
-                {(cursor, interactionMode, setTrimHoverMode) => {
-                  const mouseCursor =
-                    isNoEventSelected && interactionMode.type !== 'trim' ? (
-                      <MouseCursor
-                        mousePosition={mousePosition.x}
-                        cursorLabel={dateFormat(timeAtCursor)}
-                        cursor={cursor}
-                        cursorColor={cursorColor}
-                        interactionMode={interactionMode}
-                        zoomRangeStart={timeScale(timeAtCursor - zoomWidth / 2)!}
-                        zoomRangeEnd={timeScale(timeAtCursor + zoomWidth / 2)!}
-                        zoomScale={smallerZoomScale}
-                        isZoomInPossible={isZoomInPossible}
-                      />
-                    ) : (
-                      <g />
-                    )
-
-                  return (
-                    <g>
-                      <GridLines
-                        height={height}
-                        domain={domain}
-                        smallerZoomScale={smallerZoomScale}
-                        timeScale={timeScale}
-                        weekStripes={weekStripes}
-                      />
-                      {noEventsInDomain && (<EmptyEventsText height={height} domain={domain} timeScale={timeScale} emptyEventsMessage={"No events in selected time range"}/>)}
-                      {showMarks && (
-                        <>
-                          <EventClusters
-                            height={height}
-                            eventClusters={eventClustersInsideDomain}
-                            timeScale={timeScale}
-                            yScale={yScale}
-                            expanded={laneDisplayMode === 'expanded'}
-                          />
-                          {laneDisplayMode === 'expanded' ? (
-                            <ExpandedMarks
-                              mouseCursor={mouseCursor}
-                              events={eventsInsideDomain}
-                              lanes={lanes}
-                              timeScale={timeScale}
-                              yScale={yScale}
-                              height={height}
-                              eventComponent={eventComponent}
-                              onEventHover={onEventHoverDecorated}
-                              onEventUnhover={onEventUnhoverDecorated}
-                              onEventClick={onEventClick}
-                              tooltipArrow={tooltipArrow}
-                            />
-                          ) : (
-                            <CollapsedMarks
-                              mouseCursor={mouseCursor}
-                              events={eventsInsideDomain}
-                              timeScale={timeScale}
-                              height={height}
-                              eventComponent={eventComponent}
-                              onEventHover={onEventHoverDecorated}
-                              onEventUnhover={onEventUnhoverDecorated}
-                              onEventClick={onEventClick}
-                              tooltipArrow={tooltipArrow}
-                            />
-                          )}
-                        </>
-                      )}
-                      {trimRange && (
-                        <TrimRange
-                          startX={timeScale(trimRange[0])!}
-                          endX={timeScale(trimRange[1])!}
-                          height={height}
-                          width={width}
-                        />
-                      )}
-                      {interactionMode.type === 'trim' && timeScale && (
-                        <Trimmer
-                          startX={trimRange ? trimRange[0] : maxDomain[0]}
-                          endX={trimRange ? trimRange[1] : maxDomain[1]}
-                          height={height}
-                          width={width}
-                          timeScale={timeScale}
-                          setTrimMode={setTrimHoverMode}
-                          dateFormat={dateFormat}
-                          highlightActiveArea={interactionMode.variant === 'trim pan end'}
-                        />
-                      )}
-                    </g>
-                  )
-                }}
-              </InteractionHandling>
-            )
-          }}
-        </MouseAwareSvg>
+        <svg viewBox={`0 0 ${width} ${height}`} width={width} height={height}>
+          {
+            // TODO: Support custom layers
+            layers.map((layer) => layerById[layer])
+          }
+        </svg>
       </TimelineThemeProvider>
     )
   }
