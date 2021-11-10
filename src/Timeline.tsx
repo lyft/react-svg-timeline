@@ -15,6 +15,7 @@ import { EventClusters } from './EventClusters'
 import { TimelineTheme } from './theme'
 import { TimelineThemeProvider } from './theme/TimelineThemeProvider'
 import { useZoomLevels } from './hooks/useZoomLevels'
+import { EmptyEventsText } from './EmptyEventsText'
 
 export interface TimelineProps<EID extends string, LID extends string, E extends TimelineEvent<EID, LID>> {
   width: number
@@ -153,6 +154,7 @@ export const Timeline = <EID extends string, LID extends string, E extends Timel
     )
 
     const isNoEventSelected = eventsInsideDomain.filter((e) => e.isSelected).length === 0
+    const noEventsInDomain = eventsInsideDomain.length === 0
 
     const isZoomInPossible = smallerZoomScale !== 'minimum'
     const isZoomOutPossible = currentDomainWidth < maxDomainWidth
@@ -295,6 +297,7 @@ export const Timeline = <EID extends string, LID extends string, E extends Timel
                         timeScale={timeScale}
                         weekStripes={weekStripes}
                       />
+                      {noEventsInDomain && (<EmptyEventsText height={height} domain={domain} timeScale={timeScale} emptyEventsMessage={"No events in selected time range"}/>)}
                       {showMarks && (
                         <>
                           <EventClusters
