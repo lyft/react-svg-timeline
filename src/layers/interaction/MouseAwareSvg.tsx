@@ -43,7 +43,7 @@ export const MouseAwareSvg = ({ width, height, children }: Props) => {
       width={width}
       height={height}
       ref={svgRoot}
-      style={{ overflow: 'visible', outline: 'none', boxShadow: 'none' }}
+      style={{ overflow: 'visible', outline: '0px' }}
       onMouseEnter={updateMousePosition}
       onMouseMove={updateMousePosition}
       onMouseLeave={resetMousePosition}
