@@ -114,7 +114,7 @@ const useMonthViewStyles = makeStyles((theme: Theme) => ({
     fontWeight: xAxisTheme.monthLabelFontWeight ? xAxisTheme.monthLabelFontWeight : 'bold',
     textAnchor: 'middle',
     cursor: 'default',
-  }),aoeu
+  }),
 }))
 
 interface MonthViewProps extends Omit<Props, 'smallerZoomScale'> {
