@@ -176,7 +176,7 @@ const InteractiveEventMark = <EID extends string, LID extends string, E extends 
   return (
     <g
       pointerEvents={'bounding-box'}
-      cursor={event.URLlink ? 'pointer' : 'default'}
+      cursor={'default'}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
       onClick={onMouseClick}
