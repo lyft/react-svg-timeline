@@ -230,7 +230,7 @@ const DefaultEventMark = <EID extends string, LID extends string, E extends Time
         r={eventMarkerHeight / 2}
         className={className}
         fill={e.color || defaultEventColor}
-        style={{ stroke: strokeColor }}
+        style={{ stroke: strokeColor, outline: 'none' }}
       />
     )
   } else {
@@ -244,7 +244,7 @@ const DefaultEventMark = <EID extends string, LID extends string, E extends Time
         height={eventMarkerHeight}
         className={className}
         fill={e.color || defaultEventColor}
-        style={{ stroke: strokeColor }}
+        style={{ stroke: strokeColor, outline: 'none' }}
       />
     )
   }
