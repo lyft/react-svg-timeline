@@ -19,8 +19,6 @@ import { EventClusters } from './layers/EventClusters'
 import { Axes } from './layers/Axes'
 import { Axis } from './layers/Axis'
 import { TimelineLayer } from '.'
-
-import { useZoomLevels } from './hooks/useZoomLevels'
 import { EmptyEventsText } from './EmptyEventsText'
 
 export interface TimelineProps<EID extends string, LID extends string, E extends TimelineEvent<EID, LID>> {
