@@ -25,7 +25,7 @@ interface EmptyEventsProps {
     emptyEventsMessage: string,
 }
 
-const defaultEmptyEventsMessageFontSize = 24
+const defaultEmptyEventsMessageFontSize = 20
 
 export const EmptyEventsText = ({height, domain, timeScale, emptyEventsMessage}: EmptyEventsProps) => {
   // TODO(smonero): remove this boilerplate style code everywhere
@@ -35,7 +35,7 @@ export const EmptyEventsText = ({height, domain, timeScale, emptyEventsMessage}:
   const midPoint = (timeScale(domain[0])! + timeScale(domain[1])!) / 2
 
   return (<g key={3}>
-        <text className={styles.message} x={midPoint} y={height - 2.25 * defaultEmptyEventsMessageFontSize}>
+        <text className={styles.message} x={midPoint} y={height - 2.5 * defaultEmptyEventsMessageFontSize}>
           {emptyEventsMessage}
         </text>
       </g>)
