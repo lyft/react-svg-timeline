@@ -176,12 +176,18 @@ const InteractiveEventMark = <EID extends string, LID extends string, E extends 
   return (
     <g
       pointerEvents={'bounding-box'}
-      cursor={'default'}
+      cursor={event.URLlink ? 'pointer' : 'default'}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
       onClick={onMouseClick}
     >
-      <g ref={triggerRef}>{children}</g>
+      {event.URLlink ? (
+        <a href={event.URLlink} target="_blank" rel="noreferrer noopener">
+          <g ref={triggerRef}>{children}</g>
+        </a>
+      ) : (
+        <g ref={triggerRef}>{children}</g>
+      )}
       {event.tooltip ? (
         <EventTooltip
           type={tooltipType}
