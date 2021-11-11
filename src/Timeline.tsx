@@ -209,7 +209,7 @@ export const Timeline = <EID extends string, LID extends string, E extends Timel
 
     return (
       <TimelineThemeProvider theme={theme}>
-        <svg viewBox={`0 0 ${width} ${height}`} width={width} height={height} style={{ outlineStyle: 'none'}}>
+        <svg viewBox={`0 0 ${width} ${height}`} width={width} height={height}>
           {
             // TODO: Support custom layers
             layers.map((layer) => layerById[layer])
