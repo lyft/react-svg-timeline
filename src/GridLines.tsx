@@ -92,7 +92,7 @@ const QuarterHourLine = ({ xPosition }: TickLineProps) => {
       y1={'90%'}
       x2={xPosition}
       y2={'95%'}
-      strokeWidth={.8}
+      strokeWidth={1}
     />
   )
 }
@@ -419,13 +419,13 @@ const boundViewLines = ({ height, domain, timeScale }: BoundViewProps) => {
   const lines = [
       (<g key={1}>
         <BoundLine xPosition={leftBoundPos} />
-        <text className={classes.label} x={leftBoundPos} y={height - 4 * defaultHourViewLabelFontSize}>
+        <text className={classes.label} x={leftBoundPos} y={height - 4.5 * defaultHourViewLabelFontSize}>
           {leftBoundLabel}
         </text>
       </g>),
       (<g key={2}>
         <BoundLine xPosition={rightBoundPos} />
-        <text className={classes.label} x={rightBoundPos} y={height - 4 * defaultHourViewLabelFontSize}>
+        <text className={classes.label} x={rightBoundPos} y={height - 4.5 * defaultHourViewLabelFontSize}>
           {rightBoundLabel}
         </text>
       </g>)
