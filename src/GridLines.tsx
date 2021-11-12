@@ -38,6 +38,131 @@ export const GridLines = ({ height, domain, smallerZoomScale, timeScale, weekStr
 }
 
 /* ·················································································································· */
+/*  Tick marks
+/* ·················································································································· */
+
+interface TickLineProps {
+  xPosition: number
+}
+// TODO: Possibly add more fields here to specify granularity
+interface TickViewProps {
+  height: number
+  domain: [number, number]
+  timeScale: ScaleLinear<number, number>
+}
+
+// TODO: These lines might change in style (thickness, height etc) and in other ways based off designs and looks
+const HourLine = ({ xPosition }: TickLineProps) => {
+  const xAxisTheme = useTimelineTheme().xAxis
+  const classes = useHourViewStyles(xAxisTheme)
+  return (
+    <line
+      className={classes.line}
+      x1={xPosition}
+      y1={0}
+      x2={xPosition}
+      y2={'20%'}
+      strokeWidth={1.5}
+    />
+  )
+}
+
+const HalfHourLine = ({ xPosition }: TickLineProps) => {
+  const xAxisTheme = useTimelineTheme().xAxis
+  const classes = useHourViewStyles(xAxisTheme)
+  return (
+    <line
+      className={classes.line}
+      x1={xPosition}
+      y1={0}
+      x2={xPosition}
+      y2={'10%'}
+      strokeWidth={1}
+    />
+  )
+}
+
+const QuarterHourLine = ({ xPosition }: TickLineProps) => {
+  const xAxisTheme = useTimelineTheme().xAxis
+  const classes = useHourViewStyles(xAxisTheme)
+  return (
+    <line
+      className={classes.line}
+      x1={xPosition}
+      y1={0}
+      x2={xPosition}
+      y2={'5%'}
+      strokeWidth={.5}
+    />
+  )
+}
+
+const HOURS_MS = 3600000
+const HALF_HOURS_MS = 1800000
+const QUARTER_HOURS_MS = 900000
+
+const tickLines = ({ height, domain, timeScale }: TickViewProps) => {
+  const xAxisTheme = useTimelineTheme().xAxis
+  const classes = useHourViewStyles(xAxisTheme)
+
+  const leftBoundMs = domain[0] - (domain[0] % QUARTER_HOURS_MS)
+  const rightBoundMs = domain[1]
+
+  let hourTicks = []
+  let halfHourTicks = []
+  let quarterHourTicks = []
+  // Set up the tick marks based off 15 mins, 30 mins, 1 hours 
+  for (let time = leftBoundMs; time < rightBoundMs; time += QUARTER_HOURS_MS) {
+    if (time % HOURS_MS === 0) {
+      hourTicks.push(time);
+    } else if (time % HALF_HOURS_MS === 0) {
+      halfHourTicks.push(time);
+    } else {
+      quarterHourTicks.push(time);
+    }
+  }
+
+  hourTicks = hourTicks.map(time => { timeScale(time)! })
+  halfHourTicks = halfHourTicks.map(time => { timeScale(time)! })
+  quarterHourTicks = quarterHourTicks.map(time => { timeScale(time)! })
+
+  let lines = [];
+
+  hourTicks.forEach(time => {
+    const x = timeScale(time)!
+    lines.push(
+      <g>
+        <HourLine xPosition={x} />
+        <text className={classes.label} x={x} y={height - 0.5 * defaultHourViewLabelFontSize}>
+          {time.toLocaleTimeString()}
+        </text>
+      </g>
+    )
+  })
+
+  // Note no text for half and quarter hours
+  halfHourTicks.forEach(time => {
+    const x = timeScale(time)!
+    lines.push(
+      <g>
+        <HalfHourLine xPosition={x} />
+      </g>
+    )
+  })
+
+  quarterHourTicks.forEach(time => {
+    const x = timeScale(time)!
+    lines.push(
+      <g>
+        <QuarterHourLine xPosition={x} />
+      </g>
+    )
+  })
+
+  return lines;
+}
+
+/* ·················································································································· */
 /*  Year
 /* ·················································································································· */
 
@@ -168,6 +293,9 @@ const MonthView = ({ height, domain, timeScale, showWeekStripes = false }: Month
   // Add in boundary lines in addition to other lines
   const boundLines = boundViewLines({height, domain, timeScale});
   lines.push(...boundLines);
+
+  const theTickLines = tickLines({height, domain, timeScale});
+  lines.push(...theTickLines);
   return <g>{lines}</g>
 }
 
@@ -223,7 +351,7 @@ const WeekStripes = ({ monthStart, timeScale }: WeekStripesProps) => {
 }
 
 /* ·················································································································· */
-/*  Hour
+/*  Bounds
 /* ·················································································································· */
 
 interface BoundLineProps {
