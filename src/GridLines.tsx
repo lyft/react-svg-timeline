@@ -122,40 +122,32 @@ const tickLines = ({ height, domain, timeScale }: TickViewProps) => {
     }
   }
 
-  let lines: SVGElement[] = [];
-
-  hourTicks.forEach(time => {
+  const hourLines = hourTicks.map(time => {
     const x = timeScale(time)!
-    lines.push(
-      (<g>
+    return (<g>
         <HourLine xPosition={x} />
         <text className={classes.label} x={x} y={height - 0.5 * defaultHourViewLabelFontSize}>
           {time.toLocaleTimeString()}
         </text>
       </g>)
-    )
   })
 
   // Note no text for half and quarter hours
-  halfHourTicks.forEach(time => {
+  const halfHourLines = halfHourTicks.map(time => {
     const x = timeScale(time)!
-    lines.push(
-      (<g>
+    return (<g>
         <HalfHourLine xPosition={x} />
       </g>)
-    )
   })
 
-  quarterHourTicks.forEach(time => {
+  const quarterHourLines = quarterHourTicks.map(time => {
     const x = timeScale(time)!
-    lines.push(
-      (<g>
+    return (<g>
         <QuarterHourLine xPosition={x} />
       </g>)
-    )
   })
 
-  return lines;
+  return [...hourLines, ...halfHourLines, ...quarterHourLines]
 }
 
 /* ·················································································································· */
