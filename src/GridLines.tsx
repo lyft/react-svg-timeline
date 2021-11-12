@@ -131,12 +131,12 @@ const tickLines = ({ height, domain, timeScale }: TickViewProps) => {
   hourTicks.forEach(time => {
     const x = timeScale(time)!
     lines.push(
-      <g>
+      (<g>
         <HourLine xPosition={x} />
         <text className={classes.label} x={x} y={height - 0.5 * defaultHourViewLabelFontSize}>
           {time.toLocaleTimeString()}
         </text>
-      </g>
+      </g>)
     )
   })
 
@@ -144,18 +144,18 @@ const tickLines = ({ height, domain, timeScale }: TickViewProps) => {
   halfHourTicks.forEach(time => {
     const x = timeScale(time)!
     lines.push(
-      <g>
+      (<g>
         <HalfHourLine xPosition={x} />
-      </g>
+      </g>)
     )
   })
 
   quarterHourTicks.forEach(time => {
     const x = timeScale(time)!
     lines.push(
-      <g>
+      (<g>
         <QuarterHourLine xPosition={x} />
-      </g>
+      </g>)
     )
   })
 
