@@ -127,7 +127,7 @@ const tickLines = ({ height, domain, timeScale }: TickViewProps) => {
     return (<g>
         <HourLine xPosition={x} />
         <text className={classes.label} x={x} y={height - 0.5 * defaultHourViewLabelFontSize}>
-          {time.toLocaleTimeString()}
+          {new Date(time).toLocaleTimeString()}
         </text>
       </g>)
   })
