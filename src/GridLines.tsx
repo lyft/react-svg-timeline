@@ -126,7 +126,7 @@ const tickLines = ({ height, domain, timeScale }: TickViewProps) => {
   halfHourTicks = halfHourTicks.map(time => { timeScale(time)! })
   quarterHourTicks = quarterHourTicks.map(time => { timeScale(time)! })
 
-  let lines = [];
+  let lines: SVGElement[] = [];
 
   hourTicks.forEach(time => {
     const x = timeScale(time)!
