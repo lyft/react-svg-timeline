@@ -1,11 +1,11 @@
 import * as React from 'react'
-import { ZoomScale } from './ZoomScale'
+import { ZoomScale } from '../../shared/ZoomScale'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import { orange } from '@material-ui/core/colors'
 import type { Theme } from '@material-ui/core'
-import { Cursor } from './model'
-import { InteractionMode } from './InteractionHandling'
-import CursorLabel from './CursorLabel'
+import { Cursor } from '../../model'
+import { InteractionMode } from '.'
+import { CursorLabel } from './CursorLabel'
 
 const useStyles = makeStyles<Theme, { color: string }>(() => ({
   cursor: {
