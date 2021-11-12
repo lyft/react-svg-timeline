@@ -59,9 +59,9 @@ const HourLine = ({ xPosition }: TickLineProps) => {
     <line
       className={classes.line}
       x1={xPosition}
-      y1={0}
+      y1={'80%'}
       x2={xPosition}
-      y2={'20%'}
+      y2={'100%'}
       strokeWidth={1.5}
     />
   )
@@ -74,9 +74,9 @@ const HalfHourLine = ({ xPosition }: TickLineProps) => {
     <line
       className={classes.line}
       x1={xPosition}
-      y1={'100%'}
+      y1={'90%'}
       x2={xPosition}
-      y2={'95%'}
+      y2={'100%'}
       strokeWidth={1}
     />
   )
@@ -360,7 +360,7 @@ const BoundLine = ({ xPosition, height }: BoundLineProps) => {
       x1={xPosition}
       y1={0}
       x2={xPosition}
-      y2={height ? height : '80%'}
+      y2={height ? height : '60%'}
       strokeWidth={1}
     />
   )
@@ -419,13 +419,13 @@ const boundViewLines = ({ height, domain, timeScale }: BoundViewProps) => {
   const lines = [
       (<g key={1}>
         <BoundLine xPosition={leftBoundPos} />
-        <text className={classes.label} x={leftBoundPos} y={height - 0.5 * defaultHourViewLabelFontSize}>
+        <text className={classes.label} x={leftBoundPos} y={height - 1 * defaultHourViewLabelFontSize}>
           {leftBoundLabel}
         </text>
       </g>),
       (<g key={2}>
         <BoundLine xPosition={rightBoundPos} />
-        <text className={classes.label} x={rightBoundPos} y={height - 0.5 * defaultHourViewLabelFontSize}>
+        <text className={classes.label} x={rightBoundPos} y={height - 1 * defaultHourViewLabelFontSize}>
           {rightBoundLabel}
         </text>
       </g>)
