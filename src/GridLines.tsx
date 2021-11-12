@@ -130,7 +130,7 @@ const tickLines = ({ height, domain, timeScale }: TickViewProps) => {
     const x = timeScale(time)!
     return (<g>
         <HourLine xPosition={x} />
-        <text className={classes.label} x={x} y={height - 0.5 * defaultHourViewLabelFontSize}>
+        <text className={classes.label} x={x} y={height - 0.25 * defaultHourViewLabelFontSize}>
           {new Date(time).toLocaleTimeString()}
         </text>
       </g>)
@@ -419,13 +419,13 @@ const boundViewLines = ({ height, domain, timeScale }: BoundViewProps) => {
   const lines = [
       (<g key={1}>
         <BoundLine xPosition={leftBoundPos} />
-        <text className={classes.label} x={leftBoundPos} y={height - 1 * defaultHourViewLabelFontSize}>
+        <text className={classes.label} x={leftBoundPos} y={height - 1.75 * defaultHourViewLabelFontSize}>
           {leftBoundLabel}
         </text>
       </g>),
       (<g key={2}>
         <BoundLine xPosition={rightBoundPos} />
-        <text className={classes.label} x={rightBoundPos} y={height - 1 * defaultHourViewLabelFontSize}>
+        <text className={classes.label} x={rightBoundPos} y={height - 1.75 * defaultHourViewLabelFontSize}>
           {rightBoundLabel}
         </text>
       </g>)
