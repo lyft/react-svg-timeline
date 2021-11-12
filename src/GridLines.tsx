@@ -74,9 +74,9 @@ const HalfHourLine = ({ xPosition }: TickLineProps) => {
     <line
       className={classes.line}
       x1={xPosition}
-      y1={'10%'}
+      y1={'100%'}
       x2={xPosition}
-      y2={0}
+      y2={'95%'}
       strokeWidth={1}
     />
   )
@@ -89,9 +89,9 @@ const QuarterHourLine = ({ xPosition }: TickLineProps) => {
     <line
       className={classes.line}
       x1={xPosition}
-      y1={0}
+      y1={'95%'}
       x2={xPosition}
-      y2={'95%'}
+      y2={'100%'}
       strokeWidth={.5}
     />
   )
