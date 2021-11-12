@@ -419,13 +419,13 @@ const boundViewLines = ({ height, domain, timeScale }: BoundViewProps) => {
   const lines = [
       (<g key={1}>
         <BoundLine xPosition={leftBoundPos} />
-        <text className={classes.label} x={leftBoundPos} y={height - 3 * defaultHourViewLabelFontSize}>
+        <text className={classes.label} x={leftBoundPos} y={height - 4 * defaultHourViewLabelFontSize}>
           {leftBoundLabel}
         </text>
       </g>),
       (<g key={2}>
         <BoundLine xPosition={rightBoundPos} />
-        <text className={classes.label} x={rightBoundPos} y={height - 3 * defaultHourViewLabelFontSize}>
+        <text className={classes.label} x={rightBoundPos} y={height - 4 * defaultHourViewLabelFontSize}>
           {rightBoundLabel}
         </text>
       </g>)
