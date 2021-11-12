@@ -25,35 +25,36 @@ const gridLineStyle = (theme: Theme) => ({
 })
 
 export const GridLines = ({ height, domain, smallerZoomScale, timeScale, weekStripes }: Props) => {
-  console.log(smallerZoomScale)
   switch (smallerZoomScale) {
     case ZoomLevels.TEN_YEARS:
       return <YearView height={height} domain={domain} timeScale={timeScale} showDecadesOnly={true} />
     case ZoomLevels.ONE_YEAR:
       return <YearView height={height} domain={domain} timeScale={timeScale} />
+    case ZoomLevels.ONE_MONTH:
+      return <MonthView height={height} domain={domain} timeScale={timeScale} showWeekStripes={weekStripes === undefined ? true : weekStripes} />
+    case ZoomLevels.ONE_WEEK:
+      return <DayView height={height} domain={domain} timeScale={timeScale} />
+    case ZoomLevels.ONE_DAY || ZoomLevels.TWELVE_HOURS:
+      return <HoursView height={height} domain={domain} timeScale={timeScale} />
+    case ZoomLevels.SIX_HOURS || ZoomLevels.THREE_HOURS || ZoomLevels.ONE_HOUR || ZoomLevels.THIRTY_MINS:
+      return <MinutesView height={height} domain={domain} timeScale={timeScale} />
     default:
       return (
-        <MonthView height={height} domain={domain} timeScale={timeScale} showWeekStripes={weekStripes === undefined ? true : weekStripes} />
+        <BoundsView height={height} domain={domain} timeScale={timeScale} />
       )
   }
 }
 
-/* ·················································································································· */
-/*  Tick marks
-/* ·················································································································· */
-
 interface TickLineProps {
   xPosition: number
 }
-// TODO: Possibly add more fields here to specify granularity
 interface TickViewProps {
   height: number
   domain: [number, number]
   timeScale: ScaleLinear<number, number>
 }
 
-// TODO: These lines might change in style (thickness, height etc) and in other ways based off designs and looks
-const HourLine = ({ xPosition }: TickLineProps) => {
+const LargeTickLine = ({ xPosition }: TickLineProps) => {
   const xAxisTheme = useTimelineTheme().xAxis
   const classes = useHourViewStyles(xAxisTheme)
   return (
@@ -68,7 +69,7 @@ const HourLine = ({ xPosition }: TickLineProps) => {
   )
 }
 
-const HalfHourLine = ({ xPosition }: TickLineProps) => {
+const MediumTickLine = ({ xPosition }: TickLineProps) => {
   const xAxisTheme = useTimelineTheme().xAxis
   const classes = useHourViewStyles(xAxisTheme)
   return (
@@ -83,7 +84,7 @@ const HalfHourLine = ({ xPosition }: TickLineProps) => {
   )
 }
 
-const QuarterHourLine = ({ xPosition }: TickLineProps) => {
+const SmallTickLine = ({ xPosition }: TickLineProps) => {
   const xAxisTheme = useTimelineTheme().xAxis
   const classes = useHourViewStyles(xAxisTheme)
   return (
@@ -98,14 +99,97 @@ const QuarterHourLine = ({ xPosition }: TickLineProps) => {
   )
 }
 
-const HOURS_MS = 3600000
-const HALF_HOURS_MS = 1800000
-const QUARTER_HOURS_MS = 900000
+const DAY_MS = 24 * 60 * 60 * 1000
+const TWELVE_HOURS_MS = DAY_MS / 2
+const SIX_HOURS_MS = TWELVE_HOURS_MS / 2
+const HOURS_MS = SIX_HOURS_MS / 6
+const HALF_HOURS_MS = HOURS_MS / 2
+const QUARTER_HOURS_MS = HALF_HOURS_MS / 2
 
-const tickLines = ({ height, domain, timeScale }: TickViewProps) => {
+/* ·················································································································· */
+/*  Days (used for smaller zoom level of 1 week)
+/* ·················································································································· */
+const DayView = ({ height, domain, timeScale }: TickViewProps) => {
   const xAxisTheme = useTimelineTheme().xAxis
   const classes = useHourViewStyles(xAxisTheme)
+  const leftBoundMs = domain[0] - (domain[0] % SIX_HOURS_MS)
+  const rightBoundMs = domain[1]
 
+  let dayTicks = []
+  // Set up the tick marks based off 24 hours
+  for (let time = leftBoundMs; time < rightBoundMs; time += DAY_MS) {
+      dayTicks.push(time);
+  }
+
+  const dayLines = dayTicks.map(time => {
+    const x = timeScale(time)!
+    return (<g>
+        <LargeTickLine xPosition={x} />
+        <text className={classes.label} x={x} y={height}>
+          {new Date(time).toLocaleTimeString()}
+        </text>
+      </g>)
+  })
+
+  return <g>{dayLines}</g>
+}
+
+/* ·················································································································· */
+/*  Hours (used for smaller zoom levels of 12 hours, 1 day)
+/* ·················································································································· */
+const HoursView = ({ height, domain, timeScale }: TickViewProps) => {
+  const xAxisTheme = useTimelineTheme().xAxis
+  const classes = useHourViewStyles(xAxisTheme)
+  const leftBoundMs = domain[0] - (domain[0] % SIX_HOURS_MS)
+  const rightBoundMs = domain[1]
+
+  let dayTicks = []
+  let halfDayTicks = []
+  let quarterDayTicks = []
+  // Set up the tick marks based off 24 hours, 12 hours, 6 hours
+  for (let time = leftBoundMs; time < rightBoundMs; time += SIX_HOURS_MS) {
+    if (time % HOURS_MS === 0) {
+      dayTicks.push(time);
+    } else if (time % HALF_HOURS_MS === 0) {
+      halfDayTicks.push(time);
+    } else {
+      quarterDayTicks.push(time);
+    }
+  }
+
+  const dayLines = dayTicks.map(time => {
+    const x = timeScale(time)!
+    return (<g>
+        <LargeTickLine xPosition={x} />
+        <text className={classes.label} x={x} y={height}>
+          {new Date(time).toLocaleTimeString()}
+        </text>
+      </g>)
+  })
+
+  // Note no text for half and quarter days
+  const halfDayLines = halfDayTicks.map(time => {
+    const x = timeScale(time)!
+    return (<g>
+        <MediumTickLine xPosition={x} />
+      </g>)
+  })
+  const quarterDayLines = quarterDayTicks.map(time => {
+    const x = timeScale(time)!
+    return (<g>
+        <SmallTickLine xPosition={x} />
+      </g>)
+  })
+
+  return <g>{[...dayLines, ...halfDayLines, ...quarterDayLines]}</g>
+}
+
+/* ·················································································································· */
+/*  Minutes (used for smaller zoom levels of 30 mins, 1 hour, 3 hours, and 6 hours)
+/* ·················································································································· */
+const MinutesView = ({ height, domain, timeScale }: TickViewProps) => {
+  const xAxisTheme = useTimelineTheme().xAxis
+  const classes = useHourViewStyles(xAxisTheme)
   const leftBoundMs = domain[0] - (domain[0] % QUARTER_HOURS_MS)
   const rightBoundMs = domain[1]
 
@@ -126,7 +210,7 @@ const tickLines = ({ height, domain, timeScale }: TickViewProps) => {
   const hourLines = hourTicks.map(time => {
     const x = timeScale(time)!
     return (<g>
-        <HourLine xPosition={x} />
+        <LargeTickLine xPosition={x} />
         <text className={classes.label} x={x} y={height}>
           {new Date(time).toLocaleTimeString()}
         </text>
@@ -137,18 +221,17 @@ const tickLines = ({ height, domain, timeScale }: TickViewProps) => {
   const halfHourLines = halfHourTicks.map(time => {
     const x = timeScale(time)!
     return (<g>
-        <HalfHourLine xPosition={x} />
+        <MediumTickLine xPosition={x} />
       </g>)
   })
-
   const quarterHourLines = quarterHourTicks.map(time => {
     const x = timeScale(time)!
     return (<g>
-        <QuarterHourLine xPosition={x} />
+        <SmallTickLine xPosition={x} />
       </g>)
   })
 
-  return [...hourLines, ...halfHourLines, ...quarterHourLines]
+  return <g>{[...hourLines, ...halfHourLines, ...quarterHourLines]}</g>
 }
 
 /* ·················································································································· */
@@ -205,9 +288,6 @@ const YearView = ({ height, domain, timeScale, showDecadesOnly = false }: YearVi
     )
   })
 
-  // Add in boundary lines in addition to other lines
-  const boundLines = boundViewLines({height, domain, timeScale});
-  lines.push(...boundLines);
   return <g>{lines}</g>
 }
 
@@ -279,12 +359,6 @@ const MonthView = ({ height, domain, timeScale, showWeekStripes = false }: Month
     )
   })
 
-  // Add in boundary lines in addition to other lines
-  const boundLines = boundViewLines({height, domain, timeScale});
-  lines.push(...boundLines);
-
-  const theTickLines = tickLines({height, domain, timeScale});
-  lines.push(...theTickLines);
   return <g>{lines}</g>
 }
 
@@ -394,7 +468,7 @@ const getTimelineBoundsLabel = (date: Date) => {
   return label;
 }
 
-const boundViewLines = ({ height, domain, timeScale }: BoundViewProps) => {
+const BoundsView = ({ height, domain, timeScale }: BoundViewProps) => {
   const xAxisTheme = useTimelineTheme().xAxis
   const classes = useHourViewStyles(xAxisTheme)
 
@@ -428,5 +502,5 @@ const boundViewLines = ({ height, domain, timeScale }: BoundViewProps) => {
       </g>)
   ];
 
-  return lines;
+  return <g>{lines}</g>;
 }
