@@ -34,9 +34,13 @@ export const GridLines = ({ height, domain, smallerZoomScale, timeScale, weekStr
       return <MonthView height={height} domain={domain} timeScale={timeScale} showWeekStripes={weekStripes === undefined ? true : weekStripes} />
     case ZoomLevels.ONE_WEEK:
       return <DayView height={height} domain={domain} timeScale={timeScale} />
-    case ZoomLevels.ONE_DAY || ZoomLevels.TWELVE_HOURS:
+    case ZoomLevels.ONE_DAY:
+    case ZoomLevels.TWELVE_HOURS:
       return <HoursView height={height} domain={domain} timeScale={timeScale} />
-    case ZoomLevels.SIX_HOURS || ZoomLevels.THREE_HOURS || ZoomLevels.ONE_HOUR || ZoomLevels.THIRTY_MINS:
+    case ZoomLevels.SIX_HOURS:
+    case ZoomLevels.THREE_HOURS:
+    case ZoomLevels.ONE_HOUR:
+    case ZoomLevels.THIRTY_MINS:
       return <MinutesView height={height} domain={domain} timeScale={timeScale} />
     default:
       return (
