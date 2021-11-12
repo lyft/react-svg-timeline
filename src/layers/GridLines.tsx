@@ -113,7 +113,6 @@ const tickLines = ({ height, domain, timeScale }: TickViewProps) => {
   let quarterHourTicks = []
   // Set up the tick marks based off 15 mins, 30 mins, 1 hours 
   for (let time = leftBoundMs; time < rightBoundMs; time += QUARTER_HOURS_MS) {
-    console.log(time)
     if (time % HOURS_MS === 0) {
       hourTicks.push(time);
     } else if (time % HALF_HOURS_MS === 0) {
