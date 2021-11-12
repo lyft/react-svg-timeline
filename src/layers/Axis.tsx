@@ -1,8 +1,8 @@
 import * as React from 'react'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import { Theme } from '@material-ui/core'
-import { LineAxisTheme } from './theme/model'
-import { useTimelineTheme } from './theme'
+import { LineAxisTheme } from '../theme/model'
+import { useTimelineTheme } from '../theme'
 
 const useAxisStyles = makeStyles((theme: Theme) => ({
   axis: (lineAxisTheme: LineAxisTheme) => ({
