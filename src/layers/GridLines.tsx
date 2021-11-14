@@ -171,7 +171,7 @@ const MinutesView = ({ height, domain, timeScale, halves, quarters }: TickViewPr
   })
 
   // Note no text for half and quarter hours
-  const halfHourLines = halevs ? halfHourTicks.map(time => {
+  const halfHourLines = halves ? halfHourTicks.map(time => {
     const x = timeScale(time)!
     return (<g>
         <SmallTickLine xPosition={x} />
