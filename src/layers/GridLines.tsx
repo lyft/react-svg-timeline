@@ -41,7 +41,7 @@ export const GridLines = ({ height, domain, smallerZoomScale, timeScale, weekStr
     case ZoomLevels.SIX_HOURS:
       return <MinutesView height={height} domain={domain} timeScale={timeScale} ones={false} halves={false} quarters={false} />
     case ZoomLevels.THREE_HOURS:
-      return <MinutesView height={height} domain={domain} timeScale={timeScale} ones={true} halves={true} quarters={false} />
+      return <MinutesView height={height} domain={domain} timeScale={timeScale} ones={true} halves={false} quarters={false} />
     case ZoomLevels.ONE_HOUR:
       return <MinutesView height={height} domain={domain} timeScale={timeScale} ones={true} halves={true} quarters={false} />
     case ZoomLevels.THIRTY_MINS:
@@ -180,7 +180,7 @@ const MinutesView = ({ height, domain, timeScale, ones, halves, quarters }: Minu
   let hourTicks = []
   let halfHourTicks = []
   let quarterHourTicks = []
-  // Set up the tick marks based off 15 mins, 30 mins, 1 hours 
+  // Set up the tick marks based off 15 mins, 30 mins, 1 hours, 2 hours 
   for (let time = leftBoundMs; time < rightBoundMs; time += QUARTER_HOURS_MS) {
     if (time % TWO_HOURS_MS === 0) {
       twoHourTicks.push(time);
