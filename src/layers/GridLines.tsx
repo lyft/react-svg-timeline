@@ -35,17 +35,17 @@ export const GridLines = ({ height, domain, smallerZoomScale, timeScale, weekStr
     case ZoomLevels.ONE_WEEK:
       return <BoundsView height={height} domain={domain} timeScale={timeScale} />
     case ZoomLevels.ONE_DAY:
-      return <HoursView height={height} domain={domain} timeScale={timeScale} halves={false} quarters={false} />
+      return <HoursView height={height} domain={domain} timeScale={timeScale} halves={false} quarters={false} eights={true} />
     case ZoomLevels.TWELVE_HOURS:
-      return <HoursView height={height} domain={domain} timeScale={timeScale} halves={true} quarters={true} />
+      return <HoursView height={height} domain={domain} timeScale={timeScale} halves={true} quarters={true} eights={true} />
     case ZoomLevels.SIX_HOURS:
-      return <MinutesView height={height} domain={domain} timeScale={timeScale} halves={false} quarters={false} />
+      return <MinutesView height={height} domain={domain} timeScale={timeScale} ones={false} halves={false} quarters={false} />
     case ZoomLevels.THREE_HOURS:
-      return <MinutesView height={height} domain={domain} timeScale={timeScale} halves={true} quarters={false} />
+      return <MinutesView height={height} domain={domain} timeScale={timeScale} ones={true} halves={false} quarters={false} />
     case ZoomLevels.ONE_HOUR:
-      return <MinutesView height={height} domain={domain} timeScale={timeScale} halves={true} quarters={true} />
+      return <MinutesView height={height} domain={domain} timeScale={timeScale} ones={true} halves={true} quarters={false} />
     case ZoomLevels.THIRTY_MINS:
-      return <BoundsView height={height} domain={domain} timeScale={timeScale} />
+      return <MinutesView height={height} domain={domain} timeScale={timeScale} ones={true} halves={true} quarters={true} />
     default:
       return (
         <BoundsView height={height} domain={domain} timeScale={timeScale} />
@@ -56,10 +56,20 @@ export const GridLines = ({ height, domain, smallerZoomScale, timeScale, weekStr
 interface TickLineProps {
   xPosition: number
 }
-interface TickViewProps {
+interface HourTickViewProps {
   height: number
   domain: [number, number]
   timeScale: ScaleLinear<number, number>
+  halves?: boolean
+  quarters?: boolean
+  eights?: boolean
+}
+
+interface MinuteTickViewProps {
+  height: number
+  domain: [number, number]
+  timeScale: ScaleLinear<number, number>
+  ones?: boolean
   halves?: boolean
   quarters?: boolean
 }
@@ -74,7 +84,7 @@ const SmallTickLine = ({ xPosition }: TickLineProps) => {
       y1={0}
       x2={xPosition}
       y2={'95%'}
-      strokeWidth={.6}
+      strokeWidth={.5}
     />
   )
 }
@@ -82,30 +92,35 @@ const SmallTickLine = ({ xPosition }: TickLineProps) => {
 const DAY_MS = 24 * 60 * 60 * 1000
 const TWELVE_HOURS_MS = DAY_MS / 2
 const SIX_HOURS_MS = TWELVE_HOURS_MS / 2
-const HOURS_MS = SIX_HOURS_MS / 6
+const THREE_HOURS_MS = SIX_HOURS / 2
+const TWO_HOURS_MS = SIX_HOURS_MS / 3
+const HOURS_MS = TWO_HOURS_MS / 2
 const HALF_HOURS_MS = HOURS_MS / 2
 const QUARTER_HOURS_MS = HALF_HOURS_MS / 2
 
 /* ·················································································································· */
 /*  Hours 
 /* ·················································································································· */
-const HoursView = ({ height, domain, timeScale, halves, quarters }: TickViewProps) => {
+const HoursView = ({ height, domain, timeScale, halves, quarters, eights }: HourTickViewProps) => {
   const xAxisTheme = useTimelineTheme().xAxis
   const classes = useHourViewStyles(xAxisTheme)
-  const leftBoundMs = domain[0] - (domain[0] % SIX_HOURS_MS)
+  const leftBoundMs = domain[0] - (domain[0] % THREE_HOURS_MS)
   const rightBoundMs = domain[1]
 
   let dayTicks = []
   let halfDayTicks = []
   let quarterDayTicks = []
-  // Set up the tick marks based off 24 hours, 12 hours, 6 hours
-  for (let time = leftBoundMs; time < rightBoundMs; time += SIX_HOURS_MS) {
+  let eightDayTicks = []
+  // Set up the tick marks based off 24 hours, 12 hours, 6 hours, 3 hours
+  for (let time = leftBoundMs; time < rightBoundMs; time += THREE_HOURS_MS) {
     if (time % DAY_MS === 0) {
       dayTicks.push(time);
     } else if (time % TWELVE_HOURS_MS === 0) {
       halfDayTicks.push(time);
+    } else if (time % SIX_HOURS_MS === 0) {
+      quarterDayTicks.push(time)
     } else {
-      quarterDayTicks.push(time);
+      eightDayTicks.push(time)
     }
   }
 
@@ -139,24 +154,37 @@ const HoursView = ({ height, domain, timeScale, halves, quarters }: TickViewProp
       </g>)
   }) : []
 
-  return (<g>{[...dayLines, ...halfDayLines, ...quarterDayLines]}</g>)
+  const eightDayLines = eights ? eightDayTicks.map(time => {
+    const x = timeScale(time)!
+    return (<g>
+        <SmallTickLine xPosition={x} />
+        <text className={classes.label} x={x} y={height}>
+          {new Date(time).toLocaleTimeString()}
+        </text>
+      </g>)
+  }) : []
+
+  return (<g>{[...dayLines, ...halfDayLines, ...quarterDayLines, ...eightDayLines]}</g>)
 }
 
 /* ·················································································································· */
 /*  Minutes 
 /* ·················································································································· */
-const MinutesView = ({ height, domain, timeScale, halves, quarters }: TickViewProps) => {
+const MinutesView = ({ height, domain, timeScale, ones, halves, quarters }: MinuteTickViewProps) => {
   const xAxisTheme = useTimelineTheme().xAxis
   const classes = useHourViewStyles(xAxisTheme)
   const leftBoundMs = domain[0] - (domain[0] % QUARTER_HOURS_MS)
   const rightBoundMs = domain[1]
 
+  let twoHourTicks = []
   let hourTicks = []
   let halfHourTicks = []
   let quarterHourTicks = []
   // Set up the tick marks based off 15 mins, 30 mins, 1 hours 
   for (let time = leftBoundMs; time < rightBoundMs; time += QUARTER_HOURS_MS) {
-    if (time % HOURS_MS === 0) {
+    if (time % TWO_HOURS_MS === 0) {
+      twoHourTicks.push(time);
+    } else if (time % HOURS_MS === 0) {
       hourTicks.push(time);
     } else if (time % HALF_HOURS_MS === 0) {
       halfHourTicks.push(time);
@@ -164,6 +192,16 @@ const MinutesView = ({ height, domain, timeScale, halves, quarters }: TickViewPr
       quarterHourTicks.push(time);
     }
   }
+
+  const twoHourLines = ones ? hourTicks.map(time => {
+    const x = timeScale(time)!
+    return (<g>
+        <SmallTickLine xPosition={x} />
+        <text className={classes.label} x={x} y={height}>
+          {new Date(time).toLocaleTimeString()}
+        </text>
+      </g>)
+  }) : []
 
   const hourLines = hourTicks.map(time => {
     const x = timeScale(time)!
@@ -184,6 +222,7 @@ const MinutesView = ({ height, domain, timeScale, halves, quarters }: TickViewPr
         </text>
       </g>)
   }) : []
+
   const quarterHourLines = quarters ? quarterHourTicks.map(time => {
     const x = timeScale(time)!
     return (<g>
@@ -194,7 +233,7 @@ const MinutesView = ({ height, domain, timeScale, halves, quarters }: TickViewPr
       </g>)
   }) : []
 
-  return <g>{[...hourLines, ...halfHourLines, ...quarterHourLines]}</g>
+  return <g>{[...twoHourLines, ...hourLines, ...halfHourLines, ...quarterHourLines]}</g>
 }
 
 /* ·················································································································· */
