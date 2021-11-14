@@ -33,9 +33,9 @@ export const GridLines = ({ height, domain, smallerZoomScale, timeScale, weekStr
     case ZoomLevels.ONE_MONTH:
       return <MonthView height={height} domain={domain} timeScale={timeScale} showWeekStripes={weekStripes === undefined ? true : weekStripes} />
     case ZoomLevels.ONE_WEEK:
-    return <HoursView height={height} domain={domain} timeScale={timeScale} halves={false} quarters={false} />
+      return <BoundsView height={height} domain={domain} timeScale={timeScale} />
     case ZoomLevels.ONE_DAY:
-      return <HoursView height={height} domain={domain} timeScale={timeScale} halves={true} quarters={false} />
+      return <HoursView height={height} domain={domain} timeScale={timeScale} halves={false} quarters={false} />
     case ZoomLevels.TWELVE_HOURS:
       return <HoursView height={height} domain={domain} timeScale={timeScale} halves={true} quarters={true} />
     case ZoomLevels.SIX_HOURS:
@@ -74,7 +74,7 @@ const SmallTickLine = ({ xPosition }: TickLineProps) => {
       y1={0}
       x2={xPosition}
       y2={'95%'}
-      strokeWidth={.8}
+      strokeWidth={.6}
     />
   )
 }
