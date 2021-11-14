@@ -193,7 +193,7 @@ const MinutesView = ({ height, domain, timeScale, ones, halves, quarters }: Minu
     }
   }
 
-  const twoHourLines = ones ? hourTicks.map(time => {
+  const twoHourLines = ones ? twoHourTicks.map(time => {
     const x = timeScale(time)!
     return (<g>
         <SmallTickLine xPosition={x} />
