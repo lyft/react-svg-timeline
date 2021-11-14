@@ -119,11 +119,13 @@ const HoursView = ({ height, domain, timeScale, halves, quarters }: TickViewProp
       </g>)
   })
 
-  // Note no text for half and quarter days
   const halfDayLines = halves ? halfDayTicks.map(time => {
     const x = timeScale(time)!
     return (<g>
         <SmallTickLine xPosition={x} />
+        <text className={classes.label} x={x} y={height}>
+          {new Date(time).toLocaleTimeString()}
+        </text>
       </g>)
   }) : []
 
@@ -131,6 +133,9 @@ const HoursView = ({ height, domain, timeScale, halves, quarters }: TickViewProp
     const x = timeScale(time)!
     return (<g>
         <SmallTickLine xPosition={x} />
+        <text className={classes.label} x={x} y={height}>
+          {new Date(time).toLocaleTimeString()}
+        </text>
       </g>)
   }) : []
 
@@ -170,17 +175,22 @@ const MinutesView = ({ height, domain, timeScale, halves, quarters }: TickViewPr
       </g>)
   })
 
-  // Note no text for half and quarter hours
   const halfHourLines = halves ? halfHourTicks.map(time => {
     const x = timeScale(time)!
     return (<g>
         <SmallTickLine xPosition={x} />
+        <text className={classes.label} x={x} y={height}>
+          {new Date(time).toLocaleTimeString()}
+        </text>
       </g>)
   }) : []
   const quarterHourLines = quarters ? quarterHourTicks.map(time => {
     const x = timeScale(time)!
     return (<g>
         <SmallTickLine xPosition={x} />
+        <text className={classes.label} x={x} y={height}>
+          {new Date(time).toLocaleTimeString()}
+        </text>
       </g>)
   }) : []
 
