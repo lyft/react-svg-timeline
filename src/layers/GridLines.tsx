@@ -92,7 +92,7 @@ const SmallTickLine = ({ xPosition }: TickLineProps) => {
 const DAY_MS = 24 * 60 * 60 * 1000
 const TWELVE_HOURS_MS = DAY_MS / 2
 const SIX_HOURS_MS = TWELVE_HOURS_MS / 2
-const THREE_HOURS_MS = SIX_HOURS / 2
+const THREE_HOURS_MS = SIX_HOURS_MS / 2
 const TWO_HOURS_MS = SIX_HOURS_MS / 3
 const HOURS_MS = TWO_HOURS_MS / 2
 const HALF_HOURS_MS = HOURS_MS / 2
