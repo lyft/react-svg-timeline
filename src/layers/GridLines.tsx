@@ -89,6 +89,19 @@ const SmallTickLine = ({ xPosition }: TickLineProps) => {
   )
 }
 
+const smallLines = (inputTicks, timeScale, className, height) => {
+  return inputTicks.map(time => {
+    const x = timeScale(time)!
+    return (<g>
+        <SmallTickLine xPosition={x} />
+        <text className={className} x={x} y={height}>
+          {new Date(time).toLocaleTimeString()}
+        </text>
+    </g>)
+  })
+}
+
+
 const DAY_MS = 24 * 60 * 60 * 1000
 const TWELVE_HOURS_MS = DAY_MS / 2
 const SIX_HOURS_MS = TWELVE_HOURS_MS / 2
@@ -124,45 +137,13 @@ const HoursView = ({ height, domain, timeScale, halves, quarters, eights }: Hour
     }
   }
 
-  const dayLines = dayTicks.map(time => {
-    const x = timeScale(time)!
-    return (<g>
-        <SmallTickLine xPosition={x} />
-        <text className={classes.label} x={x} y={height}>
-          {new Date(time).toLocaleTimeString()}
-        </text>
-      </g>)
-  })
+  const dayLines = smallLines(dayTicks, timeScale, classes.label, height)
 
-  const halfDayLines = halves ? halfDayTicks.map(time => {
-    const x = timeScale(time)!
-    return (<g>
-        <SmallTickLine xPosition={x} />
-        <text className={classes.label} x={x} y={height}>
-          {new Date(time).toLocaleTimeString()}
-        </text>
-      </g>)
-  }) : []
+  const halfDayLines = halves ? smallLines(halfDayTicks, timeScale, classes.label, height) : []
 
-  const quarterDayLines = quarters ? quarterDayTicks.map(time => {
-    const x = timeScale(time)!
-    return (<g>
-        <SmallTickLine xPosition={x} />
-        <text className={classes.label} x={x} y={height}>
-          {new Date(time).toLocaleTimeString()}
-        </text>
-      </g>)
-  }) : []
+  const quarterDayLines = quarters ? smallLines(quarterDayTicks, timeScale, classes.label, height) : []
 
-  const eightDayLines = eights ? eightDayTicks.map(time => {
-    const x = timeScale(time)!
-    return (<g>
-        <SmallTickLine xPosition={x} />
-        <text className={classes.label} x={x} y={height}>
-          {new Date(time).toLocaleTimeString()}
-        </text>
-      </g>)
-  }) : []
+  const eightDayLines = eights ? smallLines(eightDayTicks, timeScale, classes.label, height) : []
 
   return (<g>{[...dayLines, ...halfDayLines, ...quarterDayLines, ...eightDayLines]}</g>)
 }
@@ -193,45 +174,13 @@ const MinutesView = ({ height, domain, timeScale, ones, halves, quarters }: Minu
     }
   }
 
-  const twoHourLines = ones ? twoHourTicks.map(time => {
-    const x = timeScale(time)!
-    return (<g>
-        <SmallTickLine xPosition={x} />
-        <text className={classes.label} x={x} y={height}>
-          {new Date(time).toLocaleTimeString()}
-        </text>
-      </g>)
-  }) : []
+  const twoHourLines = ones ? smallLines(twoHourTicks, timeScale, classes.label, height) : []
 
-  const hourLines = hourTicks.map(time => {
-    const x = timeScale(time)!
-    return (<g>
-        <SmallTickLine xPosition={x} />
-        <text className={classes.label} x={x} y={height}>
-          {new Date(time).toLocaleTimeString()}
-        </text>
-      </g>)
-  })
+  const hourLines = smallLines(hourTicks, timeScale, classes.label, height)
 
-  const halfHourLines = halves ? halfHourTicks.map(time => {
-    const x = timeScale(time)!
-    return (<g>
-        <SmallTickLine xPosition={x} />
-        <text className={classes.label} x={x} y={height}>
-          {new Date(time).toLocaleTimeString()}
-        </text>
-      </g>)
-  }) : []
+  const halfHourLines = halves ? smallLines(halfHourTicks, timeScale, classes.label, height) : []
 
-  const quarterHourLines = quarters ? quarterHourTicks.map(time => {
-    const x = timeScale(time)!
-    return (<g>
-        <SmallTickLine xPosition={x} />
-        <text className={classes.label} x={x} y={height}>
-          {new Date(time).toLocaleTimeString()}
-        </text>
-      </g>)
-  }) : []
+  const quarterHourLines = quarters ? smallLines(quarterHourTicks, timeScale, classes.label, height) : []
 
   return <g>{[...twoHourLines, ...hourLines, ...halfHourLines, ...quarterHourLines]}</g>
 }
