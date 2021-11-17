@@ -65,7 +65,7 @@ export const Timeline = <EID extends string, LID extends string, E extends Timel
   zoomLevels = defaultOrderedZoomLevels,
   isTrimming = false,
   trimRange,
-  layers = ['grid', 'axes', 'interaction', 'marks', 'emptyText'],
+  layers = ['grid', 'axes', 'interaction', 'marks', 'emptyEventsText', 'emptyLaneText'],
   theme,
   onEventHover = noOp,
   onEventUnhover = noOp,
