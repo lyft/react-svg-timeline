@@ -89,7 +89,7 @@ const SmallTickLine = ({ xPosition }: TickLineProps) => {
   )
 }
 
-const smallLines = (inputTicks, timeScale, className, height) => {
+const smallLines = (inputTicks: number[], timeScale: ScaleLinear<number, number>, className: string, height: number) => {
   return inputTicks.map(time => {
     const x = timeScale(time)!
     return (<g>
