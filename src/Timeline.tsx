@@ -127,7 +127,8 @@ export const Timeline = <EID extends string, LID extends string, E extends Timel
 
     const emptyLanes = lanes.length === 0
     const emptyEvents = (eventsInsideDomain.length === 0) && !emptyLanes
-
+      console.log(emptyLanes)
+      console.log(emptyEvents)
     
     const layerById = {
       grid: (
