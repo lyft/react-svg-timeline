@@ -127,8 +127,6 @@ export const Timeline = <EID extends string, LID extends string, E extends Timel
 
     const emptyLanes = lanes.length === 0
     const emptyEvents = (eventsInsideDomain.length === 0) && !emptyLanes
-      console.log(emptyLanes)
-      console.log(emptyEvents)
     
     const layerById = {
       grid: (
@@ -207,7 +205,7 @@ export const Timeline = <EID extends string, LID extends string, E extends Timel
           )}
         </g>
       ),
-      emptyText: emptyEvents && (<EmptyText height={height} domain={domain} timeScale={timeScale} emptyEventsMessage={"No events in selected time range"}/>),
+      emptyEventsText: emptyEvents && (<EmptyText height={height} domain={domain} timeScale={timeScale} emptyEventsMessage={"No events in selected time range"}/>),
       emptyLaneText: emptyLanes && (<EmptyText height={height} domain={domain} timeScale={timeScale} emptyEventsMessage={"No lanes selected"}/>)
     }
 
