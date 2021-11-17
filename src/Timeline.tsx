@@ -19,7 +19,7 @@ import { EventClusters } from './layers/EventClusters'
 import { Axes } from './layers/Axes'
 import { Axis } from './layers/Axis'
 import { TimelineLayer } from '.'
-import { EmptyEventsText } from './EmptyEventsText'
+import { EmptyText } from './layers/EmptyText'
 
 export interface TimelineProps<EID extends string, LID extends string, E extends TimelineEvent<EID, LID>> {
   width: number
@@ -65,7 +65,7 @@ export const Timeline = <EID extends string, LID extends string, E extends Timel
   zoomLevels = defaultOrderedZoomLevels,
   isTrimming = false,
   trimRange,
-  layers = ['grid', 'axes', 'interaction', 'marks', 'emptyText'],
+  layers = ['grid', 'axes', 'interaction', 'marks', 'emptyEventsText', 'emptyLaneText'],
   theme,
   onEventHover = noOp,
   onEventUnhover = noOp,
@@ -125,8 +125,9 @@ export const Timeline = <EID extends string, LID extends string, E extends Timel
       [domain]
     )
 
-    const emptyEvents = eventsInsideDomain.length === 0
-
+    const emptyLanes = lanes.length === 0
+    const emptyEvents = (eventsInsideDomain.length === 0) && !emptyLanes
+    
     const layerById = {
       grid: (
         <GridLines
@@ -204,7 +205,8 @@ export const Timeline = <EID extends string, LID extends string, E extends Timel
           )}
         </g>
       ),
-      emptyText: emptyEvents && (<EmptyEventsText height={height} domain={domain} timeScale={timeScale} emptyEventsMessage={"No events in selected time range"}/>)
+      emptyEventsText: emptyEvents && (<EmptyText height={height} domain={domain} timeScale={timeScale} emptyEventsMessage={"No events in selected time range"}/>),
+      emptyLaneText: emptyLanes && (<EmptyText height={height} domain={domain} timeScale={timeScale} emptyEventsMessage={"No lanes selected"}/>)
     }
 
     return (
