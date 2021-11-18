@@ -49,6 +49,7 @@ export interface TimelineProps<EID extends string, LID extends string, E extends
   tooltipArrow?: boolean
   animationDuration?: number
   defaultLookBack?: number
+  loading?: boolean
 }
 
 export const Timeline = <EID extends string, LID extends string, E extends TimelineEvent<EID, LID>>({
@@ -79,6 +80,7 @@ export const Timeline = <EID extends string, LID extends string, E extends Timel
   tooltipArrow = true,
   animationDuration = 1000,
   defaultLookBack = 100000,
+  loading,
 }: TimelineProps<EID, LID, E>) => {
   {
     const {
@@ -205,7 +207,7 @@ export const Timeline = <EID extends string, LID extends string, E extends Timel
           )}
         </g>
       ),
-      emptyEventsText: emptyEvents && (<EmptyText height={height} domain={domain} timeScale={timeScale} emptyEventsMessage={"No events in selected time range"}/>),
+      emptyEventsText: emptyEvents && !loading && (<EmptyText height={height} domain={domain} timeScale={timeScale} emptyEventsMessage={"No events in selected time range"}/>),
       emptyLaneText: emptyLanes && (<EmptyText height={height} domain={domain} timeScale={timeScale} emptyEventsMessage={"No lanes selected"}/>)
     }
 
