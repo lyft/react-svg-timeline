@@ -19,6 +19,7 @@ const messageStyle = makeStyles((theme: Theme) => ({
   }))
 
 interface EmptyEventsProps {
+    key: string
     height: number,
     domain: Domain,
     timeScale: ScaleLinear<number, number>,
@@ -27,14 +28,14 @@ interface EmptyEventsProps {
 
 const defaultEmptyEventsMessageFontSize = 20
 
-export const EmptyText = ({height, domain, timeScale, emptyEventsMessage}: EmptyEventsProps) => {
+export const EmptyText = ({key, height, domain, timeScale, emptyEventsMessage}: EmptyEventsProps) => {
   // TODO(smonero): remove this boilerplate style code everywhere
   const xAxisTheme: XAxisTheme = useTimelineTheme().xAxis
   const styles = messageStyle(xAxisTheme)
 
   const midPoint = (timeScale(domain[0])! + timeScale(domain[1])!) / 2
 
-  return (<g key={3}>
+  return (<g key={key}>
         <text className={styles.message} x={midPoint} y={height - 2.5 * defaultEmptyEventsMessageFontSize}>
           {emptyEventsMessage}
         </text>
