@@ -205,8 +205,8 @@ export const Timeline = <EID extends string, LID extends string, E extends Timel
           )}
         </g>
       ),
-      emptyEventsText: emptyEvents && (<EmptyText height={height} domain={domain} timeScale={timeScale} emptyEventsMessage={"No events in selected time range"}/>),
-      emptyLaneText: emptyLanes && (<EmptyText height={height} domain={domain} timeScale={timeScale} emptyEventsMessage={"No lanes selected"}/>)
+      emptyEventsText: emptyEvents && (<EmptyText key="emptyEventsText" height={height} domain={domain} timeScale={timeScale} emptyEventsMessage={"No events in selected time range"}/>),
+      emptyLaneText: emptyLanes && (<EmptyText key="emptyLaneText" height={height} domain={domain} timeScale={timeScale} emptyEventsMessage={"No lanes selected"}/>)
     }
 
     return (

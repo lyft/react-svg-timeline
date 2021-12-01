@@ -238,6 +238,7 @@ const DefaultEventMark = <EID extends string, LID extends string, E extends Time
     const width = endX - startX
     return (
       <rect
+        key={e.eventId}
         x={startX}
         y={y - eventMarkerHeight / 2}
         width={width}

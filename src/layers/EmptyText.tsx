@@ -34,7 +34,7 @@ export const EmptyText = ({height, domain, timeScale, emptyEventsMessage}: Empty
 
   const midPoint = (timeScale(domain[0])! + timeScale(domain[1])!) / 2
 
-  return (<g key={3}>
+  return (<g>
         <text className={styles.message} x={midPoint} y={height - 2.5 * defaultEmptyEventsMessageFontSize}>
           {emptyEventsMessage}
         </text>

@@ -92,7 +92,7 @@ const SmallTickLine = ({ xPosition }: TickLineProps) => {
 const smallLines = (inputTicks: number[], timeScale: ScaleLinear<number, number>, className: string, height: number) => {
   return inputTicks.map(time => {
     const x = timeScale(time)!
-    return (<g>
+    return (<g key={time}>
         <SmallTickLine xPosition={x} />
         <text className={className} x={x} y={height}>
           {new Date(time).toLocaleTimeString()}
