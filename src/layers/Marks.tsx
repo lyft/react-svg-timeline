@@ -96,7 +96,7 @@ export const Marks = <EID extends string, LID extends string, E extends Timeline
   const backgroundMarks = useMemo(
     () =>
       events.map((e: E) => (
-        <InteractiveEventMark key={`backgroundEvent-${e.eventId}`} event={e} tooltipClasses={tooltipClasses} {...props}>
+        <InteractiveEventMark key={e.eventId} event={e} tooltipClasses={tooltipClasses} {...props}>
           {eventComponentFactory(e, 'background', timeScale, y)}
         </InteractiveEventMark>
       )),
