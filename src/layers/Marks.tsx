@@ -96,7 +96,7 @@ export const Marks = <EID extends string, LID extends string, E extends Timeline
   const backgroundMarks = useMemo(
     () =>
       events.map((e: E) => (
-        <InteractiveEventMark key={e.eventId} event={e} tooltipClasses={tooltipClasses} {...props}>
+        <InteractiveEventMark key={`backgroundEvent-${e.eventId}`} event={e} tooltipClasses={tooltipClasses} {...props}>
           {eventComponentFactory(e, 'background', timeScale, y)}
         </InteractiveEventMark>
       )),
@@ -109,7 +109,7 @@ export const Marks = <EID extends string, LID extends string, E extends Timeline
         .filter((_) => true)
         .sort(sortByEventDuration)
         .map((e: E) => (
-          <InteractiveEventMark key={e.eventId} event={e} tooltipClasses={tooltipClasses} {...props}>
+          <InteractiveEventMark key={`foregroundEvent-${e.eventId}`} event={e} tooltipClasses={tooltipClasses} {...props}>
             {eventComponentFactory(e, 'foreground', timeScale, y)}
           </InteractiveEventMark>
         )),
@@ -122,7 +122,7 @@ export const Marks = <EID extends string, LID extends string, E extends Timeline
         .filter((e) => e.isSelected || e.isPinned)
         .sort(sortByEventDuration)
         .map((e: E) => (
-          <InteractiveEventMark key={e.eventId} event={e} tooltipClasses={tooltipClasses} {...props}>
+          <InteractiveEventMark key={`selectionOrPinMark-${e.eventId}`} event={e} tooltipClasses={tooltipClasses} {...props}>
             {eventComponentFactory(e, 'foreground', timeScale, y)}
           </InteractiveEventMark>
         )),
