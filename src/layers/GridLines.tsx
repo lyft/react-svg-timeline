@@ -35,7 +35,7 @@ export const GridLines = ({ height, domain, smallerZoomScale, timeScale, weekStr
     case ZoomLevels.ONE_WEEK:
       return <HoursView height={height} domain={domain} timeScale={timeScale} halves={false} quarters={false} eights={false} />
     case ZoomLevels.ONE_DAY:
-      return <HoursView height={height} domain={domain} timeScale={timeScale} halves={true} quarters={false} eights={false} />
+      return <HoursView height={height} domain={domain} timeScale={timeScale} halves={false} quarters={false} eights={false} />
     case ZoomLevels.TWELVE_HOURS:
       return <HoursView height={height} domain={domain} timeScale={timeScale} halves={true} quarters={true} eights={true} />
     case ZoomLevels.SIX_HOURS:
@@ -441,13 +441,13 @@ const BoundsView = ({ height, domain, timeScale }: BoundViewProps) => {
   const lines = [
       (<g key={1}>
         <BoundLine xPosition={leftBoundPos} />
-        <text className={classes.label} x={leftBoundPos} y={height - 4.5 * defaultHourViewLabelFontSize}>
+        <text className={classes.label} x={leftBoundPos} y={height - 2.5 * defaultHourViewLabelFontSize}>
           {leftBoundLabel}
         </text>
       </g>),
       (<g key={2}>
         <BoundLine xPosition={rightBoundPos} />
-        <text className={classes.label} x={rightBoundPos} y={height - 4.5 * defaultHourViewLabelFontSize}>
+        <text className={classes.label} x={rightBoundPos} y={height - 2.5 * defaultHourViewLabelFontSize}>
           {rightBoundLabel}
         </text>
       </g>)
