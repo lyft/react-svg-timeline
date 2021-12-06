@@ -35,9 +35,9 @@ export const GridLines = ({ height, domain, smallerZoomScale, timeScale, weekStr
     case ZoomLevels.ONE_WEEK:
       return <HoursView height={height} domain={domain} timeScale={timeScale} doubles={true} halves={false} quarters={false} eights={false} />
     case ZoomLevels.ONE_DAY:
-      return <HoursView height={height} domain={domain} timeScale={timeScale} halves={true} quarters={false} eights={false} />
+      return <HoursView height={height} domain={domain} timeScale={timeScale} doubles={false} halves={true} quarters={false} eights={false} />
     case ZoomLevels.TWELVE_HOURS:
-      return <HoursView height={height} domain={domain} timeScale={timeScale} halves={true} quarters={true} eights={true} />
+      return <HoursView height={height} domain={domain} timeScale={timeScale} doubles={false} halves={true} quarters={true} eights={true} />
     case ZoomLevels.SIX_HOURS:
       return <MinutesView height={height} domain={domain} timeScale={timeScale} ones={false} halves={false} quarters={false} />
     case ZoomLevels.THREE_HOURS:
@@ -143,7 +143,7 @@ const HoursView = ({ height, domain, timeScale, doubles, halves, quarters, eight
 
   const twoDayLines = doubles ? smallLines(twoDayTicks, timeScale, classes.label, height) : []
 
-  const dayLines = !doubles ? smallLines(dayTicks, timeScale, classes.label, height) : []
+  const dayLines = smallLines(dayTicks, timeScale, classes.label, height)
 
   const halfDayLines = halves ? smallLines(halfDayTicks, timeScale, classes.label, height) : []
 
