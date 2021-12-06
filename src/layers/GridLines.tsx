@@ -33,11 +33,11 @@ export const GridLines = ({ height, domain, smallerZoomScale, timeScale, weekStr
     case ZoomLevels.ONE_MONTH:
       return <MonthView height={height} domain={domain} timeScale={timeScale} showWeekStripes={weekStripes === undefined ? true : weekStripes} />
     case ZoomLevels.ONE_WEEK:
-      return <HoursView height={height} domain={domain} timeScale={timeScale} doubles={true} halves={false} quarters={false} eights={false} />
+      return <HoursView height={height} domain={domain} timeScale={timeScale} doubles={true} ones={false} halves={false} quarters={false} eights={false} />
     case ZoomLevels.ONE_DAY:
-      return <HoursView height={height} domain={domain} timeScale={timeScale} doubles={false} halves={true} quarters={false} eights={false} />
+      return <HoursView height={height} domain={domain} timeScale={timeScale} doubles={true} ones={true} halves={true} quarters={false} eights={false} />
     case ZoomLevels.TWELVE_HOURS:
-      return <HoursView height={height} domain={domain} timeScale={timeScale} doubles={false} halves={true} quarters={true} eights={true} />
+      return <HoursView height={height} domain={domain} timeScale={timeScale} doubles={true} ones={true} halves={true} quarters={true} eights={true} />
     case ZoomLevels.SIX_HOURS:
       return <MinutesView height={height} domain={domain} timeScale={timeScale} ones={false} halves={false} quarters={false} />
     case ZoomLevels.THREE_HOURS:
@@ -61,6 +61,7 @@ interface HourTickViewProps {
   domain: [number, number]
   timeScale: ScaleLinear<number, number>
   doubles?: boolean
+  ones?: boolean
   halves?: boolean
   quarters?: boolean
   eights?: boolean
@@ -115,7 +116,7 @@ const QUARTER_HOURS_MS = HALF_HOURS_MS / 2
 /* ·················································································································· */
 /*  Hours 
 /* ·················································································································· */
-const HoursView = ({ height, domain, timeScale, doubles, halves, quarters, eights }: HourTickViewProps) => {
+const HoursView = ({ height, domain, timeScale, doubles, ones, halves, quarters, eights }: HourTickViewProps) => {
   const xAxisTheme = useTimelineTheme().xAxis
   const classes = useHourViewStyles(xAxisTheme)
   const leftBoundMs = domain[0] - (domain[0] % THREE_HOURS_MS)
@@ -141,7 +142,9 @@ const HoursView = ({ height, domain, timeScale, doubles, halves, quarters, eight
     }
   }
 
-  const dayLines = doubles ? smallLines(twoDayTicks, timeScale, classes.label, height) : smallLines(dayTicks, timeScale, classes.label, height)
+  const twoDayLines = doubles ? smallLines(twoDayTicks, timeScale, classes.label, height) : []
+
+  const dayLines = ones ? smallLines(dayTicks, timeScale, classes.label, height) : []
 
   const halfDayLines = halves ? smallLines(halfDayTicks, timeScale, classes.label, height) : []
 
@@ -149,7 +152,7 @@ const HoursView = ({ height, domain, timeScale, doubles, halves, quarters, eight
 
   const eightDayLines = eights ? smallLines(eightDayTicks, timeScale, classes.label, height) : []
 
-  return (<g>{[...dayLines, ...halfDayLines, ...quarterDayLines, ...eightDayLines]}</g>)
+  return (<g>{[...twoDayLines, ...dayLines, ...halfDayLines, ...quarterDayLines, ...eightDayLines]}</g>)
 }
 
 /* ·················································································································· */
@@ -445,13 +448,13 @@ const BoundsView = ({ height, domain, timeScale }: BoundViewProps) => {
   const lines = [
       (<g key={1}>
         <BoundLine xPosition={leftBoundPos} />
-        <text className={classes.label} x={leftBoundPos} y={height - 2.5 * defaultHourViewLabelFontSize}>
+        <text className={classes.label} x={leftBoundPos} y={height - 2 * defaultHourViewLabelFontSize}>
           {leftBoundLabel}
         </text>
       </g>),
       (<g key={2}>
         <BoundLine xPosition={rightBoundPos} />
-        <text className={classes.label} x={rightBoundPos} y={height - 2.5 * defaultHourViewLabelFontSize}>
+        <text className={classes.label} x={rightBoundPos} y={height - 2 * defaultHourViewLabelFontSize}>
           {rightBoundLabel}
         </text>
       </g>)
