@@ -141,9 +141,7 @@ const HoursView = ({ height, domain, timeScale, doubles, halves, quarters, eight
     }
   }
 
-  const twoDayLines = doubles ? smallLines(twoDayTicks, timeScale, classes.label, height) : []
-
-  const dayLines = smallLines(dayTicks, timeScale, classes.label, height)
+  const dayLines = doubles ? smallLines(twoDayTicks, timeScale, classes.label, height) : smallLines(dayTicks, timeScale, classes.label, height)
 
   const halfDayLines = halves ? smallLines(halfDayTicks, timeScale, classes.label, height) : []
 
@@ -151,7 +149,7 @@ const HoursView = ({ height, domain, timeScale, doubles, halves, quarters, eight
 
   const eightDayLines = eights ? smallLines(eightDayTicks, timeScale, classes.label, height) : []
 
-  return (<g>{[...twoDayLines, ...dayLines, ...halfDayLines, ...quarterDayLines, ...eightDayLines]}</g>)
+  return (<g>{[...dayLines, ...halfDayLines, ...quarterDayLines, ...eightDayLines]}</g>)
 }
 
 /* ·················································································································· */
