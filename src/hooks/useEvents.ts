@@ -58,6 +58,17 @@ export const useEvents = <EID extends string, LID extends string, E extends Time
     onEventUnhover(eventId)
   }
 
+  if (!events || events.length === 0) {
+    return {
+      eventsInsideDomain: [],
+      eventClustersInsideDomain: [],
+      isNoEventSelected: true,
+      isMouseOverEvent: false,
+      onEventHoverDecorated,
+      onEventUnhoverDecorated,
+    }
+  }
+
   const comparableEvents = JSON.stringify(events)
 
   const [eventsInsideDomain, eventClustersInsideDomain, isNoEventSelected] = useMemo(() => {
