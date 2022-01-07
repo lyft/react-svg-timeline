@@ -59,6 +59,7 @@ export const useEvents = <EID extends string, LID extends string, E extends Time
   }
 
   if (!events || events.length === 0) {
+    console.log("no events")
     return {
       eventsInsideDomain: [],
       eventClustersInsideDomain: [],
