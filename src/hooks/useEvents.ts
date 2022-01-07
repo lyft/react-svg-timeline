@@ -63,7 +63,7 @@ export const useEvents = <EID extends string, LID extends string, E extends Time
       eventsInsideDomain: [],
       eventClustersInsideDomain: [],
       isNoEventSelected: true,
-      isMouseOverEvent: false,
+      isMouseOverEvent: isMouseOverEvent,
       onEventHoverDecorated,
       onEventUnhoverDecorated,
     }
