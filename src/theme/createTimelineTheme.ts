@@ -1,4 +1,4 @@
-import { Theme as MaterialTheme } from '@material-ui/core'
+import { Theme as MaterialTheme } from '@mui/material'
 import { TimelineTheme, TooltipTheme, TrimmerTheme, XAxisTheme } from './model'
 import deepMerge from 'ts-deepmerge'
 

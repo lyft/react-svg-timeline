@@ -1,6 +1,6 @@
 import * as React from 'react'
-import makeStyles from '@material-ui/core/styles/makeStyles'
-import { Theme } from '@material-ui/core'
+import makeStyles from '@mui/styles/makeStyles'
+import { Theme } from '@mui/material'
 import { LineAxisTheme } from '../theme/model'
 import { useTimelineTheme } from '../theme'
 

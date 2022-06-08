@@ -1,7 +1,7 @@
 import { Timeline } from '../../dist'
 import * as React from 'react'
-import FavoriteIcon from '@material-ui/icons/Favorite'
-import makeStyles from '@material-ui/core/styles/makeStyles'
+import FavoriteIcon from '@mui/icons-material/Favorite'
+import makeStyles from '@mui/styles/makeStyles'
 import cn from 'classnames'
 import { ExampleComponentFactory, ExampleEvent, ExampleProps } from './types'
 
