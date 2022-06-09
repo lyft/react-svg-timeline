@@ -30,9 +30,9 @@
     "prepare": "npm run build"
   },
   "peerDependencies": {
-    "@mui/material": ">=5.8",
-    "@mui/styles": ">=5.8",
-    "@emotion/styled": ">=11.5",
+    "@emotion/styled": "^11.8.1",
+    "@mui/material": "^5.8.3",
+    "@mui/styles": "^5.8.3",
     "react": ">=16.3",
     "react-dom": ">=16.3"
   },
@@ -45,7 +45,7 @@
     "ts-deepmerge": "^1.0.7"
   },
   "devDependencies": {
-    "@emotion/styled": "^11.5.0",
+    "@emotion/styled": "^11.8.1",
     "@mui/material": "^5.8.3",
     "@mui/styles": "^5.8.3",
     "@testing-library/react": "^11.0.4",
