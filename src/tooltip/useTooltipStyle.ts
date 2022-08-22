@@ -1,7 +1,7 @@
-import makeStyles from '@material-ui/core/styles/makeStyles'
-import { Theme } from '@material-ui/core'
+import makeStyles from '@mui/styles/makeStyles'
+import { Theme } from '@mui/material'
 import { TooltipTheme } from '../theme/model'
-import { ClassNameMap } from '@material-ui/styles'
+import { ClassNameMap } from '@mui/styles'
 
 export type TooltipClasses = ClassNameMap<'background' | 'text' | 'svg'>
 

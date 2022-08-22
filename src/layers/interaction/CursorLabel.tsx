@@ -1,6 +1,7 @@
 import React from 'react'
-import { makeStyles, Theme } from '@material-ui/core'
-import { orange } from '@material-ui/core/colors'
+import { Theme } from '@mui/material'
+import makeStyles from '@mui/styles/makeStyles'
+import { orange } from '@mui/material/colors'
 
 const useStyles = makeStyles((theme: Theme) => ({
   label: {

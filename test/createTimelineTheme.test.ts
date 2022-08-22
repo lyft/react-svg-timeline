@@ -1,8 +1,8 @@
-import { createMuiTheme } from '@material-ui/core'
+import { createTheme } from '@mui/material'
 import { createTimelineTheme } from '../src/theme'
 
 describe('createTimelineTheme', () => {
-  const materialTheme = createMuiTheme()
+  const materialTheme = createTheme()
   const defaultTheme = createTimelineTheme(materialTheme)
   expect(defaultTheme).toEqual({
     xAxis: {

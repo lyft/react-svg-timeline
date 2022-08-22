@@ -1,4 +1,4 @@
-import { grey, indigo, yellow } from '@material-ui/core/colors'
+import { grey, indigo, yellow } from '@mui/material/colors'
 
 export const noOp = () => {
   /* ignorance is bliss */

@@ -1,7 +1,7 @@
 import React from 'react'
 import { TimelineThemeContext } from './TimelineThemeContext'
 import { TimelineTheme } from './model'
-import { useTheme } from '@material-ui/core'
+import { useTheme } from '@mui/material'
 import { createTimelineTheme } from './createTimelineTheme'
 
 interface Props {

@@ -1,6 +1,7 @@
 import React from 'react'
 import { ScaleBand } from 'd3-scale'
-import { makeStyles, Theme } from '@material-ui/core'
+import { Theme } from '@mui/material'
+import makeStyles from '@mui/styles/makeStyles'
 import { TimelineLane } from '../model'
 import { Axis } from './Axis'
 import { defaultLaneColor } from '../utils'
