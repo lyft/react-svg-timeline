@@ -13205,8 +13205,8 @@ __metadata:
     vitest: ^0.19.1
     vitest-canvas-mock: ^0.2.1
   peerDependencies:
-    react: ">=18.2.0"
-    react-dom: ">=18.2.0"
+    react: ">=17.0.0"
+    react-dom: ">=17.0.0"
   languageName: unknown
   linkType: soft
 
