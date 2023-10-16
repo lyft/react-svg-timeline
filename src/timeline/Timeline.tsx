@@ -47,6 +47,8 @@ export interface TimelineProps<EID extends string, LID extends string, E extends
   onCursorMove?: (millisAtCursor?: number, startMillis?: number, endMillis?: number) => void
   onTrimRangeChange?: (startMillis: number, endMillis: number) => void
   onInteractionEnd?: () => void
+  weekStripes?: boolean
+  animationDuration?: number
 }
 
 export const Timeline = <EID extends string, LID extends string, E extends TimelineEvent<EID, LID>>({
@@ -73,6 +75,8 @@ export const Timeline = <EID extends string, LID extends string, E extends Timel
   onCursorMove,
   onTrimRangeChange,
   onInteractionEnd,
+  weekStripes,
+  animationDuration = 1000,
 }: TimelineProps<EID, LID, E>) => {
   const {
     domain,
@@ -90,6 +94,7 @@ export const Timeline = <EID extends string, LID extends string, E extends Timel
     maxDomainStart,
     maxDomainEnd,
     setDomain,
+    animationDuration,
   })
 
   const {
@@ -130,6 +135,7 @@ export const Timeline = <EID extends string, LID extends string, E extends Timel
         domain={domain}
         smallerZoomScale={nextSmallerZoomScale}
         timeScale={timeScale}
+        weekStripes={weekStripes}
       />
     ),
     axes:

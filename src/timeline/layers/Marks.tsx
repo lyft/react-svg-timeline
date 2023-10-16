@@ -233,6 +233,7 @@ const DefaultEventMark = <EID extends string, LID extends string, E extends Time
     const width = endX - startX
     return (
       <rect
+        key={e.eventId}
         style={{ ...style, ...pinnedStrokeStyle }}
         x={startX}
         y={y - eventMarkHeight / 2}
