@@ -1,6 +1,0 @@
-export * from './model'
-export * from './Timeline'
-export * from './layers/Marks'
-export * from './layers/interaction'
-export * from './shared/ZoomScale'
-export { TimelineTheme, createTimelineTheme } from './theme'
