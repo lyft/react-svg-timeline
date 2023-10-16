@@ -33,6 +33,7 @@
     "build": "vite build && tsc --project tsconfig.build.json",
     "build-storybook": "build-storybook",
     "coverage": "vitest run --coverage",
+    "postinstall": "yarn build",
     "lint": "eslint --max-warnings 0 './src/**/*.{ts,tsx}'",
     "lint:fix": "eslint './src/**/*.{ts,tsx}' --fix",
     "prepack": "yarn build",
