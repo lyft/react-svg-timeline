@@ -88,6 +88,7 @@
     ]
   },
   "dependencies": {
+    "@vitejs/plugin-react": "^2.0.0",
     "d3-array": "^2.11.0",
     "d3-scale": "^3.0.1",
     "d3-time": "^3.0.0",
@@ -117,7 +118,6 @@
     "@types/react-dom": "^18.0.6",
     "@types/react-redux": "7.1.24",
     "@types/testing-library__jest-dom": "^5.14.5",
-    "@vitejs/plugin-react": "^2.0.0",
     "babel-loader": "^8.2.5",
     "eslint": "^8.20.0",
     "eslint-config-react-app": "^7.0.1",
@@ -127,16 +127,12 @@
     "node-fetch": "^3.2.9",
     "prettier": "2.7.1",
     "prettier-plugin-packagejson": "2.2.18",
-    "react": ">=18.2.0",
-    "react-dom": ">=18.2.0",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
     "typescript": "^4.7.4",
     "vite-plugin-checker": "^0.4.9",
     "vitest": "^0.19.1",
     "vitest-canvas-mock": "^0.2.1"
-  },
-  "peerDependencies": {
-    "react": ">=17.0.0",
-    "react-dom": ">=17.0.0"
   },
   "packageManager": "yarn@3.2.2"
 }
