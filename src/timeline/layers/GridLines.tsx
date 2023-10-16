@@ -8,8 +8,10 @@ import { range } from '../utils'
 import { useTimelineTheme } from '../theme/useTimelineTheme'
 import { XAxisTheme } from '../theme/model'
 import { CSSProperties } from 'react'
+import { GridLines as CustomGridLines } from './custom/GridLines'
+import type { CustomGridLineProps } from './custom/GridLines'
 
-interface Props {
+interface Props extends CustomGridLineProps {
   height: number
   domain: Domain
   smallerZoomScale: ZoomLevels
@@ -23,7 +25,10 @@ const useGridLineStyle = () => {
   }
 }
 
-export const GridLines = ({ height, domain, smallerZoomScale, timeScale }: Props) => {
+export const GridLines = ({ height, domain, smallerZoomScale, timeScale, ...props }: Props) => {
+  if (CustomGridLines) {
+    return CustomGridLines({ height, domain, smallerZoomScale, timeScale, ...props })
+  }
   switch (smallerZoomScale) {
     case ZoomLevels.TEN_YEARS:
       return <YearView height={height} domain={domain} timeScale={timeScale} showDecadesOnly={true} />
@@ -46,7 +51,7 @@ const useYearViewTextStyle = (): CSSProperties => {
     fill: theme.xAxis.labelColor,
     opacity: 0.5,
     fontFamily: theme.base.fontFamilyCaption,
-    fontWeight: 'bold',
+    fontWeight: theme?.xAxis?.yearLabelFontWeight ?? 'bold',
     textAnchor: 'middle',
     cursor: 'default',
   }
@@ -206,3 +211,6 @@ const WeekStripes = ({ monthStart, timeScale }: WeekStripesProps) => {
 
   return <g>{lines}</g>
 }
+
+export type { Props }
+export { YearView, MonthView }

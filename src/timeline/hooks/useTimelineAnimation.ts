@@ -9,18 +9,18 @@ type Animation =
       toDomain: Domain
     }>
 
-const animationDuration = 1000
-
 interface UseTimelineAnimationProps {
   setDomain: (domain: Domain) => void
   maxDomainStart: number
   maxDomainEnd: number
+  animationDuration: number
 }
 
 export const useTimelineAnimation = ({
   setDomain,
   maxDomainStart,
   maxDomainEnd,
+  animationDuration,
 }: UseTimelineAnimationProps): {
   isAnimationInProgress: boolean
   setAnimation: React.Dispatch<React.SetStateAction<Animation>>
@@ -54,7 +54,7 @@ export const useTimelineAnimation = ({
         setAnimation('none')
       }
     }
-  }, [animation, now, setDomain])
+  }, [animation, now, setDomain, animationDuration])
 
   const isAnimationInProgress = animation !== 'none'
 

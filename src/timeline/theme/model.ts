@@ -1,4 +1,5 @@
 import * as React from 'react'
+import type { CustomXAxisTheme } from './custom/model'
 
 export interface TimelineTheme {
   readonly base: BaseTheme
@@ -26,7 +27,7 @@ export interface EventTheme {
   readonly clusterFillColor: string
 }
 
-export interface XAxisTheme {
+export interface XAxisTheme extends CustomXAxisTheme {
   readonly labelColor: string
   readonly monthLabelFontSize?: number
   readonly yearLabelFontSize?: number
