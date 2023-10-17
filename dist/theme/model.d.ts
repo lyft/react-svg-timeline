@@ -1,5 +1,5 @@
 import * as React from 'react';
-import type { CustomXAxisTheme } from './custom/model';
+import type { CustomTooltipTheme, CustomXAxisTheme } from './custom/model';
 export interface TimelineTheme {
     readonly base: BaseTheme;
     readonly event: EventTheme;
@@ -39,7 +39,7 @@ export interface LaneTheme {
     readonly middleLineColor: string;
     readonly middleLineWidth: number;
 }
-export interface TooltipTheme {
+export interface TooltipTheme extends CustomTooltipTheme {
     readonly fontSize: number;
     readonly fontFamily: React.CSSProperties['fontFamily'];
     readonly backgroundColor: string;

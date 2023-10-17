@@ -12,6 +12,7 @@ interface Props<EID extends string, LID extends string, E extends TimelineEvent<
     onEventHover?: (eventId: EID) => void;
     onEventUnhover?: (eventId: EID) => void;
     onEventClick?: (eventId: EID) => void;
+    tooltipArrow?: boolean;
 }
-export declare const ExpandedMarks: <EID extends string, LID extends string, E extends TimelineEvent<EID, LID>>({ height, events, lanes, timeScale, yScale, eventComponent, onEventHover, onEventUnhover, onEventClick, }: Props<EID, LID, E>) => JSX.Element;
+export declare const ExpandedMarks: <EID extends string, LID extends string, E extends TimelineEvent<EID, LID>>({ height, events, lanes, timeScale, yScale, eventComponent, onEventHover, onEventUnhover, onEventClick, tooltipArrow, }: Props<EID, LID, E>) => JSX.Element;
 export {};

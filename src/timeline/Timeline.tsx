@@ -49,6 +49,7 @@ export interface TimelineProps<EID extends string, LID extends string, E extends
   onInteractionEnd?: () => void
   weekStripes?: boolean
   animationDuration?: number
+  tooltipArrow?: boolean
 }
 
 export const Timeline = <EID extends string, LID extends string, E extends TimelineEvent<EID, LID>>({
@@ -77,6 +78,7 @@ export const Timeline = <EID extends string, LID extends string, E extends Timel
   onInteractionEnd,
   weekStripes,
   animationDuration = 1000,
+  tooltipArrow = true,
 }: TimelineProps<EID, LID, E>) => {
   const {
     domain,
@@ -188,6 +190,7 @@ export const Timeline = <EID extends string, LID extends string, E extends Timel
             onEventHover={onEventHoverDecorated}
             onEventUnhover={onEventUnhoverDecorated}
             onEventClick={onEventClick}
+            tooltipArrow={tooltipArrow}
           />
         ) : (
           <CollapsedMarks
@@ -198,6 +201,7 @@ export const Timeline = <EID extends string, LID extends string, E extends Timel
             onEventHover={onEventHoverDecorated}
             onEventUnhover={onEventUnhoverDecorated}
             onEventClick={onEventClick}
+            tooltipArrow={tooltipArrow}
           />
         )}
       </g>

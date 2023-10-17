@@ -8,6 +8,7 @@ export interface TimelineEvent<EID extends string, LID extends string> {
     tooltip?: string;
     isSelected?: boolean;
     isPinned?: boolean;
+    URLlink?: string;
 }
 export interface TimelineLane<LID extends string> {
     laneId: LID;

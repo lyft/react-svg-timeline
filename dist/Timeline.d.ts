@@ -30,5 +30,6 @@ export interface TimelineProps<EID extends string, LID extends string, E extends
     onInteractionEnd?: () => void;
     weekStripes?: boolean;
     animationDuration?: number;
+    tooltipArrow?: boolean;
 }
-export declare const Timeline: <EID extends string, LID extends string, E extends TimelineEvent<EID, LID>>({ width, height, events, lanes, dateFormat, eventComponent, laneDisplayMode, suppressMarkAnimation, enableEventClustering, customRange, zoomLevels, isTrimming, trimRange, layers, theme, enabledInteractions, onEventHover, onEventUnhover, onEventClick, onZoomRangeChange, onCursorMove, onTrimRangeChange, onInteractionEnd, weekStripes, animationDuration, }: TimelineProps<EID, LID, E>) => JSX.Element;
+export declare const Timeline: <EID extends string, LID extends string, E extends TimelineEvent<EID, LID>>({ width, height, events, lanes, dateFormat, eventComponent, laneDisplayMode, suppressMarkAnimation, enableEventClustering, customRange, zoomLevels, isTrimming, trimRange, layers, theme, enabledInteractions, onEventHover, onEventUnhover, onEventClick, onZoomRangeChange, onCursorMove, onTrimRangeChange, onInteractionEnd, weekStripes, animationDuration, tooltipArrow, }: TimelineProps<EID, LID, E>) => JSX.Element;

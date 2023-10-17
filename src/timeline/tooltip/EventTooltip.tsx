@@ -5,13 +5,18 @@ import { scaleLinear } from 'd3-scale'
 import { CSSProperties } from 'react'
 import { useTimelineTheme } from '../theme/useTimelineTheme'
 
+interface BackGroundStyleProperties extends CSSProperties {
+  rx: number
+  ry: number
+}
+
 const useTooltipRootSvgStyle = (): CSSProperties => ({
   textAlign: 'left',
 })
 
-const useBackgroundStyle = (): CSSProperties => {
+const useBackgroundStyle = (): BackGroundStyleProperties => {
   const theme = useTimelineTheme().tooltip
-  return { fill: theme.backgroundColor, strokeWidth: 0 }
+  return { fill: theme.backgroundColor, strokeWidth: 0, rx: theme.rx ? theme.rx : 3, ry: theme.ry ? theme.ry : 3 }
 }
 
 const useTooltipTextStyle = (): CSSProperties => {
@@ -36,9 +41,10 @@ interface Props {
   readonly parentWidth: number
   readonly text: string
   readonly triggerRef: React.RefObject<SVGElement>
+  readonly tooltipArrow?: boolean
 }
 
-export const EventTooltip = ({ type, y, parentWidth, text, triggerRef }: Props) => {
+export const EventTooltip = ({ type, y, parentWidth, text, triggerRef, tooltipArrow }: Props) => {
   const tooltipRootSvgStyle = useTooltipRootSvgStyle()
   const tooltipBackgroundStyle = useBackgroundStyle()
   const tooltipTextStyle = useTooltipTextStyle()
@@ -82,7 +88,7 @@ export const EventTooltip = ({ type, y, parentWidth, text, triggerRef }: Props) 
         return (
           <g>
             <svg style={tooltipRootSvgStyle} x={svgX} y={svgY} width={tooltipWidth} height={tooltipHeight}>
-              <rect style={tooltipBackgroundStyle} width="100%" height="100%" rx={3} ry={3} />
+              <rect style={tooltipBackgroundStyle} width="100%" height="100%" />
               <TooltipText
                 style={tooltipTextStyle}
                 textLines={textLines}
@@ -90,7 +96,7 @@ export const EventTooltip = ({ type, y, parentWidth, text, triggerRef }: Props) 
                 tooltipWidth={tooltipWidth}
               />
             </svg>
-            <Arrow style={arrowStyle} tipX={tooltipX} baseY={arrowY} dimension={arrowDimension} />
+            {tooltipArrow && <Arrow style={arrowStyle} tipX={tooltipX} baseY={arrowY} dimension={arrowDimension} />}
           </g>
         )
       }}

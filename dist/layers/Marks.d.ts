@@ -10,6 +10,7 @@ export interface Props<EID extends string, LID extends string, E extends Timelin
     onEventHover?: (eventId: EID) => void;
     onEventUnhover?: (eventId: EID) => void;
     onEventClick?: (eventId: EID) => void;
+    tooltipArrow?: boolean;
 }
 /**
  * Events are drawn semi-transparently, such that 'event accumulations' become visible.
