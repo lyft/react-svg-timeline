@@ -4301,7 +4301,10 @@ const Fl = () => ({
       width: e,
       height: t,
       pointerEvents: "all",
-      fill: "transparent"
+      fill: "transparent",
+      style: {
+        outline: "none"
+      }
     }), n(a)]
   });
 }, Vl = (e) => {

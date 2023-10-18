@@ -48,7 +48,7 @@ export const MouseAwareSvg = ({ width, height, children }: Props) => {
       onMouseMove={updateMousePosition}
       onMouseLeave={resetMousePosition}
     >
-      <rect width={width} height={height} pointerEvents="all" fill="transparent"></rect>
+      <rect width={width} height={height} pointerEvents="all" fill="transparent" style={{ outline: 'none' }}></rect>
       {children(mousePosition)}
     </svg>
   )
